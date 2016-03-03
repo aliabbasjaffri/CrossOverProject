@@ -10,5 +10,6 @@
 
     <string name="settings_loginMode_key">logintype</string>
     <string name="settings_loginMode_default">doctor</string>
+    <string name="title_activity_registration_login">Conferences App</string>
 
 </resources>
