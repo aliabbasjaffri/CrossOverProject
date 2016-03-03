@@ -7,6 +7,9 @@
     <string name="admin">Admin</string>
     <string name="doctor">Doctor</string>
 
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+
 
     <string name="settings_loginMode_key">logintype</string>
     <string name="settings_loginMode_default">doctor</string>

@@ -8,15 +8,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.crossoverproject.R;
+import com.crossoverproject.fragment.RegistrationLoginActivityFragment;
+import com.crossoverproject.fragment.SignInFragment;
 
-public class RegistrationLoginActivity extends AppCompatActivity {
+public class RegistrationLoginActivity extends AppCompatActivity
+{
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setToolbarHomeAccess(false);
+
+        getSupportFragmentManager()
+                .beginTransaction().add(R.id.registrationLoginActivityFramelayout, RegistrationLoginActivityFragment.newInstance(), RegistrationLoginActivityFragment.class.getName())
+                .addToBackStack(RegistrationLoginActivityFragment.class.getName()).commit();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -26,6 +35,17 @@ public class RegistrationLoginActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    public void setToolbarHomeAccess(Boolean enable)
+    {
+        if(enable)
+            toolbar.setVisibility(View.VISIBLE);
+        else
+            toolbar.setVisibility(View.INVISIBLE);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(enable);
+        getSupportActionBar().setDisplayShowHomeEnabled(enable);
     }
 
 }

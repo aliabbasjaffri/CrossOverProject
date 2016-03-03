@@ -8,11 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
 import com.crossoverproject.R;
 
 /**
@@ -32,6 +30,10 @@ public class RegistrationLoginActivityFragment extends Fragment
 
     }
 
+    public static RegistrationLoginActivityFragment newInstance() {
+        return new RegistrationLoginActivityFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -43,7 +45,7 @@ public class RegistrationLoginActivityFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                viewPopUp();
+                viewPopUp(true);
             }
         });
 
@@ -51,14 +53,14 @@ public class RegistrationLoginActivityFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                viewPopUp();
+                viewPopUp(false);
             }
         });
 
         return view;
     }
 
-    private void viewPopUp() {
+    private void viewPopUp(final boolean checker) {
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         final View promptView = layoutInflater.inflate(R.layout.popup_registration_login, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
@@ -74,6 +76,17 @@ public class RegistrationLoginActivityFragment extends Fragment
                         radioRoleButton = (RadioButton) promptView.findViewById(radioRoleGroup.getCheckedRadioButtonId());
                         selectedRole = radioRoleButton.getText().toString();
                         Toast.makeText(getContext() , selectedRole , Toast.LENGTH_SHORT).show();
+
+                        if(checker)
+                        {
+                            getActivity().getSupportFragmentManager()
+                                .beginTransaction().replace(R.id.registrationLoginActivityFramelayout, SignInFragment.newInstance(selectedRole), SignInFragment.class.getName())
+                                .addToBackStack(SignInFragment.class.getName()).commit();
+                        }
+                        else
+                        {
+
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
