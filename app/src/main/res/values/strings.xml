@@ -4,12 +4,15 @@
 
     <string name="content_authority">com.crossover</string>
 
-    <string name="doctor">doctor</string>
-    <string name="admin">admin</string>
+    <string name="admin">Admin</string>
+    <string name="doctor">Doctor</string>
 
 
     <string name="settings_loginMode_key">logintype</string>
     <string name="settings_loginMode_default">doctor</string>
     <string name="title_activity_registration_login">Conferences App</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -21,38 +21,29 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        final String SQL_CREATE_USER_TABLE =
-                "CREATE TABLE " + UserEntry.TABLE_NAME + " (" +
-                        UserEntry._ID + "  INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        UserEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
-                        UserEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
-                        UserEntry.COLUMN_PASSWORD + " TEXT NOT NULL, " +
-                        " UNIQUE (" + UserEntry.COLUMN_USERNAME + ") " +
-                        " );";
-
         final String SQL_CREATE_ADMIN_TABLE =
                 "CREATE TABLE " + AdminEntry.TABLE_NAME + " (" +
                         AdminEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         AdminEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
+                        AdminEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
+                        AdminEntry.COLUMN_PASSWORD + " TEXT NOT NULL, " +
                         AdminEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                         AdminEntry.COLUMN_AGE + " INTEGER NOT NULL, " +
-                        AdminEntry.COLUMN_SEX + " TEXT NOT NULL, " +
-                        " FOREIGN KEY (" + AdminEntry.COLUMN_USER_ID + ") REFERENCES " +
-                        UserEntry.TABLE_NAME + " (" + UserEntry.COLUMN_USER_ID + ") " +
+                        AdminEntry.COLUMN_SEX + " TEXT NOT NULL " +
                         " );";
 
         final String SQL_CREATE_DOCTOR_TABLE =
                 "CREATE TABLE " + DoctorEntry.TABLE_NAME + " (" +
                         DoctorEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         DoctorEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
+                        DoctorEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
+                        DoctorEntry.COLUMN_PASSWORD + " TEXT NOT NULL, " +
                         DoctorEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                         DoctorEntry.COLUMN_AGE + " INTEGER NOT NULL, " +
                         DoctorEntry.COLUMN_SEX + " TEXT NOT NULL, " +
                         DoctorEntry.COLUMN_PRACTISE_YEARS + " INTEGER NOT NULL, " +
                         DoctorEntry.COLUMN_SPECIALIZATION_AREA + " TEXT NOT NULL, " +
-                        DoctorEntry.COLUMN_CURRENT_LOCATION + " TEXT NOT NULL, " +
-                        " FOREIGN KEY (" + DoctorEntry.COLUMN_USER_ID + ") REFERENCES " +
-                        UserEntry.TABLE_NAME + " (" + UserEntry.COLUMN_USER_ID + ") " +
+                        DoctorEntry.COLUMN_CURRENT_LOCATION + " TEXT NOT NULL " +
                         " );";
 
         final String SQL_CREATE_CONFERENCE_TABLE =
@@ -77,7 +68,6 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
                         SuggestionEntry.COLUMN_LOCATION_PREFERENCE + " TEXT NOT NULL " +
                         " );";
 
-        db.execSQL(SQL_CREATE_USER_TABLE);
         db.execSQL(SQL_CREATE_ADMIN_TABLE);
         db.execSQL(SQL_CREATE_DOCTOR_TABLE);
         db.execSQL(SQL_CREATE_CONFERENCE_TABLE);
@@ -87,7 +77,6 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        db.execSQL("DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + AdminEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DoctorEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + ConferenceEntry.TABLE_NAME);
