@@ -24,7 +24,7 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_USER_TABLE =
                 "CREATE TABLE " + UserEntry.TABLE_NAME + " (" +
                         UserEntry._ID + "  INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        UserEntry.COLUMN_USER_ID + " TEXT UNIQUE NOT NULL, " +
+                        UserEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
                         UserEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
                         UserEntry.COLUMN_PASSWORD + " TEXT NOT NULL, " +
                         " UNIQUE (" + UserEntry.COLUMN_USERNAME + ") " +
@@ -33,7 +33,7 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_ADMIN_TABLE =
                 "CREATE TABLE " + AdminEntry.TABLE_NAME + " (" +
                         AdminEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        AdminEntry.COLUMN_USER_ID + " TEXT UNIQUE NOT NULL, " +
+                        AdminEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
                         AdminEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                         AdminEntry.COLUMN_AGE + " INTEGER NOT NULL, " +
                         AdminEntry.COLUMN_SEX + " TEXT NOT NULL, " +
@@ -44,7 +44,7 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_DOCTOR_TABLE =
                 "CREATE TABLE " + DoctorEntry.TABLE_NAME + " (" +
                         DoctorEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        DoctorEntry.COLUMN_USER_ID + " TEXT UNIQUE NOT NULL, " +
+                        DoctorEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
                         DoctorEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                         DoctorEntry.COLUMN_AGE + " INTEGER NOT NULL, " +
                         DoctorEntry.COLUMN_SEX + " TEXT NOT NULL, " +
@@ -58,7 +58,7 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_CONFERENCE_TABLE =
                 "CREATE TABLE " + ConferenceEntry.TABLE_NAME + " (" +
                         ConferenceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        ConferenceEntry.COLUMN_USER_ID + " TEXT UNIQUE NOT NULL, " +
+                        ConferenceEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
                         ConferenceEntry.COLUMN_CONFERENCE_ID + " TEXT NOT NULL, " +
                         ConferenceEntry.COLUMN_TOPIC + " TEXT NOT NULL, " +
                         ConferenceEntry.COLUMN_SUMMARY + " TEXT NOT NULL, " +
@@ -69,7 +69,7 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_SUGGESTION_TABLE =
                 "CREATE TABLE " + SuggestionEntry.TABLE_NAME + " (" +
                         SuggestionEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        SuggestionEntry.COLUMN_USER_ID + " TEXT UNIQUE NOT NULL, " +
+                        SuggestionEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
                         SuggestionEntry.COLUMN_SUGGESTION_ID + " TEXT NOT NULL, " +
                         SuggestionEntry.COLUMN_TOPIC + " TEXT NOT NULL, " +
                         SuggestionEntry.COLUMN_SUMMARY + " TEXT NOT NULL, " +

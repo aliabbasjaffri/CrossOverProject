@@ -20,14 +20,6 @@ public class ConferenceContract
     public static final String PATH_CONFERENCE = "conference";
     public static final String PATH_SUGGESTION = "suggestion";
 
-    public static long normalizeDate(long startDate) {
-        // normalize the start date to the beginning of the (UTC) day
-        Time time = new Time();
-        time.set(startDate);
-        int julianDay = Time.getJulianDay(startDate, time.gmtoff);
-        return time.setJulianDay(julianDay);
-    }
-
     public static final class UserEntry implements BaseColumns
     {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_USER).build();
@@ -47,6 +39,14 @@ public class ConferenceContract
         public static Uri buildUserUri(long id)
         {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static long getUserIDFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
+        }
+
+        public static String getUserNameFromUri(Uri uri) {
+            return uri.getPathSegments().get(2);
         }
     }
 
@@ -70,8 +70,8 @@ public class ConferenceContract
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static String getIDFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+        public static long getAdminIDFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
         }
     }
 
@@ -98,9 +98,10 @@ public class ConferenceContract
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static String getIDFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+        public static long getDoctorIDFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
         }
+
     }
 
     public static final class ConferenceEntry implements BaseColumns
