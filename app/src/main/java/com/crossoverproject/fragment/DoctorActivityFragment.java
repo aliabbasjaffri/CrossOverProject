@@ -93,7 +93,7 @@ public class DoctorActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String sortOrder = ConferenceContract.ConferenceEntry._ID+ " ASC";
-        Uri ConferenceUri = ConferenceContract.ConferenceEntry.buildConferenceUri(id);
+        Uri ConferenceUri = ConferenceContract.ConferenceEntry.CONTENT_URI;
         return new CursorLoader(getActivity(), ConferenceUri, CONFERENCE_COLUMNS , null, null, sortOrder);
     }
 

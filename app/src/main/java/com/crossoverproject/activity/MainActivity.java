@@ -1,5 +1,6 @@
 package com.crossoverproject.activity;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.crossoverproject.R;
+import com.crossoverproject.provider.ConferenceContract;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_TOPIC, "Diabetes");
+        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_SUMMARY, "Diabetes is dangeros and killer Disease");
+        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_LOCATION, "Lahore, Pakistan");
+        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_DATE, "5th March 2016");
+
+        this.getContentResolver().insert(ConferenceContract.ConferenceEntry.CONTENT_URI , contentValues);
     }
 
     @Override

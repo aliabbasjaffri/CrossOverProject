@@ -1,5 +1,6 @@
 package com.crossoverproject.activity;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.crossoverproject.R;
 import com.crossoverproject.fragment.DoctorActivityFragment;
 import com.crossoverproject.fragment.SignInFragment;
 import com.crossoverproject.fragment.SignUpFragment;
+import com.crossoverproject.provider.ConferenceContract;
 
 public class DoctorActivity extends AppCompatActivity implements DoctorActivityFragment.Callback
 {
@@ -56,6 +59,7 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
 
         if (id == R.id.action_add_suggestion)
         {
+            addNewSuggestion();
             return true;
         }
 
@@ -65,17 +69,36 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
     private void addNewSuggestion()
     {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
-        final View promptView = layoutInflater.inflate(R.layout.popup_registration_login, null);
+        final View promptView = layoutInflater.inflate(R.layout.popup_suggestion, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(promptView);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor editor = prefs.edit();
+
+        final EditText topic = (EditText)promptView.findViewById(R.id.newSuggestionTopicEditText);
+        final EditText summary = (EditText)promptView.findViewById(R.id.newSuggestionSummaryEditText);
+        final EditText location = (EditText)promptView.findViewById(R.id.newSuggestionLocationEditText);
+        final EditText date = (EditText)promptView.findViewById(R.id.newSuggestionDateEditText);
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id)
                     {
+                        String sTopic = topic.getText().toString();
+                        String sSummary = summary.getText().toString();
+                        String sLocation = location.getText().toString();
+                        String sDate = date.getText().toString();
 
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_USER_ID , "Ali123");
+                        contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_TOPIC , sTopic);
+                        contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_SUMMARY , sSummary);
+                        contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_LOCATION_PREFERENCE, sLocation);
+                        contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_AVAILABILITY_DATE, sDate);
+
+                        DoctorActivity.this.getContentResolver()
+                                .insert(ConferenceContract.SuggestionEntry.CONTENT_URI, contentValues);
+
+                        Toast.makeText(DoctorActivity.this , "Your Suggestion is logged. Thank you." , Toast.LENGTH_SHORT )
+                                .show();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

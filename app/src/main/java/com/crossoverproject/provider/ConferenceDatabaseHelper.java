@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ConferenceDatabaseHelper extends SQLiteOpenHelper
 {
     private static final String DATABASE_NAME = "crossoverdatabase.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public ConferenceDatabaseHelper(Context context)
     {
@@ -52,7 +52,7 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
                         ConferenceEntry.COLUMN_SUMMARY + " TEXT NOT NULL, " +
                         ConferenceEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
                         ConferenceEntry.COLUMN_LOCATION + " TEXT NOT NULL, " +
-                        ConferenceEntry.COLUMN_READ_TAG + " TEXT NOT NULL " +
+                        ConferenceEntry.COLUMN_READ_TAG + " TEXT " +
                         " );";
 
         final String SQL_CREATE_SUGGESTION_TABLE =
@@ -63,7 +63,7 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
                         SuggestionEntry.COLUMN_SUMMARY + " TEXT NOT NULL, " +
                         SuggestionEntry.COLUMN_AVAILABILITY_DATE + " INTEGER NOT NULL, " +
                         SuggestionEntry.COLUMN_LOCATION_PREFERENCE + " TEXT NOT NULL, " +
-                        SuggestionEntry.COLUMN_READ_TAG + " TEXT NOT NULL " +
+                        SuggestionEntry.COLUMN_READ_TAG + " TEXT " +
                         " );";
 
         db.execSQL(SQL_CREATE_ADMIN_TABLE);
