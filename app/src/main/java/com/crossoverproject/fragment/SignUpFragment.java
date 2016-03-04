@@ -1,6 +1,7 @@
 package com.crossoverproject.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.crossoverproject.R;
+import com.crossoverproject.activity.DoctorActivity;
 import com.crossoverproject.utils.Settings;
 
 /**
@@ -92,6 +94,7 @@ public class SignUpFragment extends Fragment
                 getDataFromEditTextFields();
                 radioSexButton = (RadioButton) view.findViewById(radioSexGroup.getCheckedRadioButtonId());
                 sSex = radioSexButton.getText().toString();
+                startActivity(new Intent(getActivity() , DoctorActivity.class));
             }
         });
 
