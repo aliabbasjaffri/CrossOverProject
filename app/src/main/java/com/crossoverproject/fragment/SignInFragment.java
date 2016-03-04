@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
-import com.crossoverproject.activity.RegistrationLoginActivity;
+import com.crossoverproject.utils.Settings;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,45 +27,16 @@ public class SignInFragment extends Fragment
     String sUsername;
     String sPassword;
 
-    RegistrationLoginActivity obj = (RegistrationLoginActivity) getActivity();
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-
-
     public SignInFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment SignInFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SignInFragment newInstance(String param1) {
-        SignInFragment fragment = new SignInFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        fragment.setArguments(args);
-
-        return fragment;
+    public static SignInFragment newInstance() {
+        return new SignInFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
-        //obj.setToolbarHomeAccess(true);
     }
 
     @Override
@@ -78,10 +49,9 @@ public class SignInFragment extends Fragment
         password = (EditText) view.findViewById(R.id.signInFragmentPasswordEditText);
         loginButton = (Button) view.findViewById(R.id.signInFragmentLoginButton);
 
-        if(mParam1 == getContext().getString(R.string.admin))
-            headerText.setText("Admin Login");
-        else
-            headerText.setText("Doctor Login");
+        String sText = Settings.getLoginRegistrationMode(getActivity()) + " Login";
+
+        headerText.setText(sText);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

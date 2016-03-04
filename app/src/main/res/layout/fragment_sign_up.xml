@@ -60,7 +60,8 @@
             android:layout_height="wrap_content"
             android:text="@string/male"
             android:id="@+id/signUpMaleRadioButton"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:checked="true" />
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -75,21 +76,24 @@
         android:layout_height="wrap_content"
         android:id="@+id/signUpYearsOfPractiseEditText"
         android:layout_gravity="center_horizontal"
-        android:hint="Years of Practise" />
+        android:hint="Years of Practise"
+        android:visibility="gone" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/signUpSpecializationAreaEditText"
         android:layout_gravity="center_horizontal"
-        android:hint="Specialization Area" />
+        android:hint="Specialization Area"
+        android:visibility="gone" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/signUpCurrentLocationEditText"
         android:layout_gravity="center_horizontal"
-        android:hint="Current Location" />
+        android:hint="Current Location"
+        android:visibility="gone" />
 
     <Button
         android:layout_width="match_parent"

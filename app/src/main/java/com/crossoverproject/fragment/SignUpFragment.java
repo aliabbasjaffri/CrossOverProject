@@ -6,56 +6,111 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.crossoverproject.R;
+import com.crossoverproject.utils.Settings;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SignUpFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignUpFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+public class SignUpFragment extends Fragment
+{
+    TextView headerTextView;
+    EditText userName;
+    EditText password;
+    EditText name;
+    EditText age;
+    EditText yearsOfPractise;
+    EditText areaOfExpertise;
+    EditText location;
+    RadioGroup radioSexGroup;
+    RadioButton radioSexButton;
+    Button register;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
+    String sHeaderText;
+    String sUsername;
+    String sPassword;
+    String sName;
+    String sAge;
+    String sSex;
+    String sYearsOfPractise;
+    String sAreaOfExpertise;
+    String sLocation;
 
-    public SignUpFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SignUpFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SignUpFragment newInstance(String param1) {
-        SignUpFragment fragment = new SignUpFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        fragment.setArguments(args);
-        return fragment;
+    public SignUpFragment()
+    {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        final View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        headerTextView = (TextView) view.findViewById(R.id.signUpHeaderTextView);
+        userName = (EditText) view.findViewById(R.id.signUpUsernameEditText);
+        password = (EditText) view.findViewById(R.id.signUpPasswordEditText);
+        name = (EditText) view.findViewById(R.id.signUpNameEditText);
+        age = (EditText) view.findViewById(R.id.signUpAgeEditText);
+        yearsOfPractise = (EditText) view.findViewById(R.id.signUpYearsOfPractiseEditText);
+        areaOfExpertise = (EditText) view.findViewById(R.id.signUpSpecializationAreaEditText);
+        location = (EditText) view.findViewById(R.id.signUpCurrentLocationEditText);
+
+        if( Settings.getLoginRegistrationMode(getActivity()) == getActivity().getString(R.string.admin) )
+        {
+            yearsOfPractise.setVisibility(View.GONE);
+            areaOfExpertise.setVisibility(View.GONE);
+            location.setVisibility(View.GONE);
+        }
+        else
+        {
+            yearsOfPractise.setVisibility(View.VISIBLE);
+            areaOfExpertise.setVisibility(View.VISIBLE);
+            location.setVisibility(View.VISIBLE);
+        }
+
+        sHeaderText = Settings.getLoginRegistrationMode(getActivity()) + " Registration";
+        headerTextView.setText(sHeaderText);
+
+        radioSexGroup = (RadioGroup) view.findViewById(R.id.signUpSexRadioGroup);
+
+        register = (Button) view.findViewById(R.id.signUpCreateUserButton);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                getDataFromEditTextFields();
+                radioSexButton = (RadioButton) view.findViewById(radioSexGroup.getCheckedRadioButtonId());
+                sSex = radioSexButton.getText().toString();
+            }
+        });
+
+        return view;
+    }
+
+    private void getDataFromEditTextFields()
+    {
+        sUsername = userName.getText().toString();
+        sPassword = password.getText().toString();
+        sName = name.getText().toString();
+        sAge = age.getText().toString();
+
+        if( Settings.getLoginRegistrationMode(getActivity()) == getActivity().getString(R.string.doctor) )
+        {
+            sYearsOfPractise = yearsOfPractise.getText().toString();
+            sAreaOfExpertise = areaOfExpertise.getText().toString();
+            sLocation = location.getText().toString();
+        }
     }
 
 }

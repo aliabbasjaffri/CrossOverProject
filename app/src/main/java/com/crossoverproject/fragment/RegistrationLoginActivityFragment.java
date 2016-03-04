@@ -1,6 +1,8 @@
 package com.crossoverproject.fragment;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -65,6 +67,8 @@ public class RegistrationLoginActivityFragment extends Fragment
         final View promptView = layoutInflater.inflate(R.layout.popup_registration_login, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setView(promptView);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final SharedPreferences.Editor editor = prefs.edit();
 
         radioRoleGroup = (RadioGroup) promptView.findViewById(R.id.loginRole);
         radioRoleButton = (RadioButton) promptView.findViewById(radioRoleGroup.getCheckedRadioButtonId());
@@ -75,17 +79,21 @@ public class RegistrationLoginActivityFragment extends Fragment
                     {
                         radioRoleButton = (RadioButton) promptView.findViewById(radioRoleGroup.getCheckedRadioButtonId());
                         selectedRole = radioRoleButton.getText().toString();
+
+                        editor.putString(getActivity().getString(R.string.settings_loginMode_key) , selectedRole).apply();
                         Toast.makeText(getContext() , selectedRole , Toast.LENGTH_SHORT).show();
 
                         if(checker)
                         {
                             getActivity().getSupportFragmentManager()
-                                .beginTransaction().replace(R.id.registrationLoginActivityFramelayout, SignInFragment.newInstance(selectedRole), SignInFragment.class.getName())
+                                .beginTransaction().replace(R.id.registrationLoginFragment, new SignInFragment(), SignInFragment.class.getName())
                                 .addToBackStack(SignInFragment.class.getName()).commit();
                         }
                         else
                         {
-
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction().replace(R.id.registrationLoginFragment, new SignUpFragment(), SignUpFragment.class.getName())
+                                    .addToBackStack(SignUpFragment.class.getName()).commit();
                         }
                     }
                 })

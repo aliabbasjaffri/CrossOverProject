@@ -24,7 +24,7 @@ public class RegistrationLoginActivity extends AppCompatActivity
         setToolbarHomeAccess(false);
 
         getSupportFragmentManager()
-                .beginTransaction().add(R.id.registrationLoginActivityFramelayout, RegistrationLoginActivityFragment.newInstance(), RegistrationLoginActivityFragment.class.getName())
+                .beginTransaction().add(R.id.registrationLoginFragment, RegistrationLoginActivityFragment.newInstance(), RegistrationLoginActivityFragment.class.getName())
                 .addToBackStack(RegistrationLoginActivityFragment.class.getName()).commit();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

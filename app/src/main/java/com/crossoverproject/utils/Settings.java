@@ -11,7 +11,7 @@ import com.crossoverproject.R;
  */
 public class Settings
 {
-    public static String getLoginMode(Context context)
+    public static String getLoginRegistrationMode(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.settings_loginMode_key), context.getString(R.string.settings_loginMode_default));

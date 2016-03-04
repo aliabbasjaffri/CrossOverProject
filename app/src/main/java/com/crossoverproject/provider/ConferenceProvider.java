@@ -89,7 +89,7 @@ public class ConferenceProvider extends ContentProvider
     private Cursor getAdminByUserName(Uri uri, String[] projection, String sortOrder)
     {
         String username = ConferenceContract.AdminEntry.getAdminNameFromUri(uri);
-        String loginType = Settings.getLoginMode(getContext());
+        String loginType = Settings.getLoginRegistrationMode(getContext());
         boolean type = (loginType == getContext().getString(R.string.admin));
 
         return (type ? sUserwithAdmin : sUserwithDoctor).query(mConferenceDatabaseHelper.getReadableDatabase(),
@@ -105,7 +105,7 @@ public class ConferenceProvider extends ContentProvider
     private Cursor getDoctorByUserName(Uri uri, String[] projection, String sortOrder)
     {
         String username = ConferenceContract.DoctorEntry.getDoctorNameFromUri(uri);
-        String loginType = Settings.getLoginMode(getContext());
+        String loginType = Settings.getLoginRegistrationMode(getContext());
         boolean type = (loginType == getContext().getString(R.string.admin));
 
         return (type ? sUserwithAdmin : sUserwithDoctor).query(mConferenceDatabaseHelper.getReadableDatabase(),
