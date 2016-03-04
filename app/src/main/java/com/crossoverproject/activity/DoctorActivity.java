@@ -1,19 +1,30 @@
 package com.crossoverproject.activity;
 
-import android.content.Intent;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.crossoverproject.R;
+import com.crossoverproject.fragment.DoctorActivityFragment;
+import com.crossoverproject.fragment.SignInFragment;
+import com.crossoverproject.fragment.SignUpFragment;
 
-public class DoctorActivity extends AppCompatActivity {
-
+public class DoctorActivity extends AppCompatActivity implements DoctorActivityFragment.Callback
+{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,4 +62,35 @@ public class DoctorActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void addNewSuggestion()
+    {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        final View promptView = layoutInflater.inflate(R.layout.popup_registration_login, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptView);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = prefs.edit();
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    @Override
+    public void onItemSelected(Uri uri)
+    {
+
+    }
 }

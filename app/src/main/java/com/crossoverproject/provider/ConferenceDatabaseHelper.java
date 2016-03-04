@@ -24,7 +24,6 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_ADMIN_TABLE =
                 "CREATE TABLE " + AdminEntry.TABLE_NAME + " (" +
                         AdminEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        AdminEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
                         AdminEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
                         AdminEntry.COLUMN_PASSWORD + " TEXT NOT NULL, " +
                         AdminEntry.COLUMN_NAME + " TEXT NOT NULL, " +
@@ -35,7 +34,6 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_DOCTOR_TABLE =
                 "CREATE TABLE " + DoctorEntry.TABLE_NAME + " (" +
                         DoctorEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        DoctorEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
                         DoctorEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
                         DoctorEntry.COLUMN_PASSWORD + " TEXT NOT NULL, " +
                         DoctorEntry.COLUMN_NAME + " TEXT NOT NULL, " +
@@ -50,22 +48,22 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
                 "CREATE TABLE " + ConferenceEntry.TABLE_NAME + " (" +
                         ConferenceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         ConferenceEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
-                        ConferenceEntry.COLUMN_CONFERENCE_ID + " TEXT NOT NULL, " +
                         ConferenceEntry.COLUMN_TOPIC + " TEXT NOT NULL, " +
                         ConferenceEntry.COLUMN_SUMMARY + " TEXT NOT NULL, " +
                         ConferenceEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
-                        ConferenceEntry.COLUMN_LOCATION + " TEXT NOT NULL " +
+                        ConferenceEntry.COLUMN_LOCATION + " TEXT NOT NULL, " +
+                        ConferenceEntry.COLUMN_READ_TAG + " TEXT NOT NULL " +
                         " );";
 
         final String SQL_CREATE_SUGGESTION_TABLE =
                 "CREATE TABLE " + SuggestionEntry.TABLE_NAME + " (" +
                         SuggestionEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         SuggestionEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
-                        SuggestionEntry.COLUMN_SUGGESTION_ID + " TEXT NOT NULL, " +
                         SuggestionEntry.COLUMN_TOPIC + " TEXT NOT NULL, " +
                         SuggestionEntry.COLUMN_SUMMARY + " TEXT NOT NULL, " +
                         SuggestionEntry.COLUMN_AVAILABILITY_DATE + " INTEGER NOT NULL, " +
-                        SuggestionEntry.COLUMN_LOCATION_PREFERENCE + " TEXT NOT NULL " +
+                        SuggestionEntry.COLUMN_LOCATION_PREFERENCE + " TEXT NOT NULL, " +
+                        SuggestionEntry.COLUMN_READ_TAG + " TEXT NOT NULL " +
                         " );";
 
         db.execSQL(SQL_CREATE_ADMIN_TABLE);

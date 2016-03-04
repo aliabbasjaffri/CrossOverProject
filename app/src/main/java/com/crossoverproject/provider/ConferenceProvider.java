@@ -50,13 +50,13 @@ public class ConferenceProvider extends ContentProvider
     }
 
     private static final String sAdminIDSelection =
-            ConferenceContract.AdminEntry.TABLE_NAME + "." + ConferenceContract.AdminEntry.COLUMN_USER_ID + " = ? ";
+            ConferenceContract.AdminEntry.TABLE_NAME + "." + ConferenceContract.AdminEntry._ID + " = ? ";
 
     private static final String sAdminNameSelection =
             ConferenceContract.AdminEntry.TABLE_NAME + "." + ConferenceContract.AdminEntry.COLUMN_USERNAME + " = ? ";
 
     private static final String sDoctorIDSelection =
-            ConferenceContract.DoctorEntry.TABLE_NAME + "." + ConferenceContract.DoctorEntry.COLUMN_USER_ID + " = ? ";
+            ConferenceContract.DoctorEntry.TABLE_NAME + "." + ConferenceContract.DoctorEntry._ID + " = ? ";
 
     private static final String sDoctorNameSelection =
             ConferenceContract.DoctorEntry.TABLE_NAME + "." + ConferenceContract.DoctorEntry.COLUMN_USERNAME + " = ? ";
@@ -89,10 +89,8 @@ public class ConferenceProvider extends ContentProvider
     private Cursor getAdminByUserName(Uri uri, String[] projection, String sortOrder)
     {
         String username = ConferenceContract.AdminEntry.getAdminNameFromUri(uri);
-        String loginType = Settings.getLoginRegistrationMode(getContext());
-        boolean type = (loginType == getContext().getString(R.string.admin));
 
-        return (type ? sUserwithAdmin : sUserwithDoctor).query(mConferenceDatabaseHelper.getReadableDatabase(),
+        return sUserwithAdmin.query(mConferenceDatabaseHelper.getReadableDatabase(),
                 projection,
                 sAdminNameSelection,
                 new String[]{username},
@@ -105,10 +103,8 @@ public class ConferenceProvider extends ContentProvider
     private Cursor getDoctorByUserName(Uri uri, String[] projection, String sortOrder)
     {
         String username = ConferenceContract.DoctorEntry.getDoctorNameFromUri(uri);
-        String loginType = Settings.getLoginRegistrationMode(getContext());
-        boolean type = (loginType == getContext().getString(R.string.admin));
 
-        return (type ? sUserwithAdmin : sUserwithDoctor).query(mConferenceDatabaseHelper.getReadableDatabase(),
+        return sUserwithDoctor.query(mConferenceDatabaseHelper.getReadableDatabase(),
                 projection,
                 sDoctorNameSelection,
                 new String[]{username},

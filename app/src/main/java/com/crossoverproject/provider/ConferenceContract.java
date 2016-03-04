@@ -29,7 +29,6 @@ public class ConferenceContract
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ADMIN;
 
         public static final String TABLE_NAME = "admin";
-        public static final String COLUMN_USER_ID = "user_id";
         public static final String COLUMN_USERNAME = "username";
         public static final String COLUMN_PASSWORD = "password";
         public static final String COLUMN_NAME = "name";
@@ -60,7 +59,6 @@ public class ConferenceContract
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_DOCTOR;
 
         public static final String TABLE_NAME = "doctor";
-        public static final String COLUMN_USER_ID = "user_id";
         public static final String COLUMN_USERNAME = "username";
         public static final String COLUMN_PASSWORD = "password";
         public static final String COLUMN_NAME = "name";
@@ -95,11 +93,11 @@ public class ConferenceContract
 
         public static final String TABLE_NAME = "conference";
         public static final String COLUMN_USER_ID = "user_id";
-        public static final String COLUMN_CONFERENCE_ID = "conf_id";
         public static final String COLUMN_TOPIC = "topic";
         public static final String COLUMN_SUMMARY = "summary";
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_LOCATION = "location";
+        public static final String COLUMN_READ_TAG = "read_tag";
 
         public static Uri buildConferenceUri(long id)
         {
@@ -118,11 +116,11 @@ public class ConferenceContract
 
         public static final String TABLE_NAME = "suggestion";
         public static final String COLUMN_USER_ID = "user_id";
-        public static final String COLUMN_SUGGESTION_ID = "sugg_id";
         public static final String COLUMN_TOPIC = "topic";
         public static final String COLUMN_SUMMARY = "summary";
         public static final String COLUMN_AVAILABILITY_DATE = "availability_date";
         public static final String COLUMN_LOCATION_PREFERENCE = "location_preference";
+        public static final String COLUMN_READ_TAG = "read_tag";
 
         public static Uri buildSuggestionUri(long id)
         {
