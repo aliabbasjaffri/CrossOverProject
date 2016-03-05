@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.crossoverproject.R;
 import com.crossoverproject.activity.AdminActivity;
 import com.crossoverproject.activity.DoctorActivity;
+import com.crossoverproject.activity.RegistrationLoginActivity;
 import com.crossoverproject.provider.ConferenceContract;
 import com.crossoverproject.utils.Settings;
 
@@ -108,9 +109,10 @@ public class SignUpFragment extends Fragment
                 if(validations())
                 {
                     storeToDatabase();
-                    startActivity(new Intent(getActivity()
-                            , (Settings.getLoginRegistrationMode(getActivity()) == getActivity().getString(R.string.doctor)) ?
-                            DoctorActivity.class : AdminActivity.class));
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction().replace(R.id.registrationLoginFragment, RegistrationLoginActivityFragment.newInstance(), RegistrationLoginActivityFragment.class.getSimpleName())
+                            .addToBackStack(RegistrationLoginActivityFragment.class.getSimpleName()).commit();
+                    Toast.makeText(getActivity(), "Please Login using your Credentials", Toast.LENGTH_SHORT).show();
                 }
             }
         });

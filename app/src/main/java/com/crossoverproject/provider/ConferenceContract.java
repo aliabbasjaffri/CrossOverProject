@@ -47,6 +47,11 @@ public class ConferenceContract
         public static String getAdminNameFromUri(Uri uri) {
             return uri.getPathSegments().get(2);
         }
+
+        public static Uri buildAdminWithName(String userName)
+        {
+            return CONTENT_URI.buildUpon().appendPath(userName).build();
+        }
     }
 
     public static final class DoctorEntry implements BaseColumns
@@ -79,6 +84,11 @@ public class ConferenceContract
 
         public static String getDoctorNameFromUri(Uri uri) {
             return uri.getPathSegments().get(2);
+        }
+
+        public static Uri buildDoctorWithName(String userName)
+        {
+            return CONTENT_URI.buildUpon().appendPath(userName).build();
         }
     }
 
