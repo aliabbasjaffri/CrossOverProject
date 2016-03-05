@@ -7,8 +7,11 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -27,11 +30,11 @@ import android.widget.Toast;
 import com.crossoverproject.R;
 import com.crossoverproject.fragment.AdminActivityFragment;
 import com.crossoverproject.provider.ConferenceContract;
+import com.crossoverproject.utils.Settings;
 
 import java.util.Calendar;
 
-public class AdminActivity extends AppCompatActivity implements AdminActivityFragment.Callback
-{
+public class AdminActivity extends AppCompatActivity implements AdminActivityFragment.Callback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,51 +57,50 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_admin, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_add_conference)
-        {
+        if (id == R.id.action_add_conference) {
             addNewConference();
             return true;
+        } else if (id == R.id.action_admin_signout) {
+            signOut();
+            return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void addNewConference()
-    {
+    private void addNewConference() {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         final View promptView = layoutInflater.inflate(R.layout.popup_conference, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(promptView);
 
-        final EditText topic = (EditText)promptView.findViewById(R.id.newConferenceTopicEditText);
-        final EditText summary = (EditText)promptView.findViewById(R.id.newConferenceSummaryEditText);
-        final EditText location = (EditText)promptView.findViewById(R.id.newConferenceLocationEditText);
-        final EditText date = (EditText)promptView.findViewById(R.id.newConferenceDateEditText);
+        final EditText topic = (EditText) promptView.findViewById(R.id.newConferenceTopicEditText);
+        final EditText summary = (EditText) promptView.findViewById(R.id.newConferenceSummaryEditText);
+        final EditText location = (EditText) promptView.findViewById(R.id.newConferenceLocationEditText);
+        final EditText date = (EditText) promptView.findViewById(R.id.newConferenceDateEditText);
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id)
-                    {
+                    public void onClick(DialogInterface dialog, int id) {
                         String sTopic = topic.getText().toString();
                         String sSummary = summary.getText().toString();
                         String sLocation = location.getText().toString();
                         String sDate = date.getText().toString();
 
                         ContentValues contentValues = new ContentValues();
-                        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_USER_ID , "Ali12");
-                        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_TOPIC , sTopic);
-                        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_SUMMARY , sSummary);
+                        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_USER_ID, Settings.getUserID(AdminActivity.this));
+                        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_TOPIC, sTopic);
+                        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_SUMMARY, sSummary);
                         contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_LOCATION, sLocation);
                         contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_DATE, sDate);
 
@@ -117,6 +119,15 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
 
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    private void signOut() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(this.getString(R.string.settings_userid_key)).apply();
+
+        startActivity(new Intent(this, RegistrationLoginActivity.class));
+        this.finish();
     }
 
     @Override
@@ -140,7 +151,7 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            Toast.makeText(getActivity(), String.valueOf(year) + String.valueOf(month)+String.valueOf(day), Toast.LENGTH_SHORT ).show();
+            Toast.makeText(getActivity(), String.valueOf(year) + String.valueOf(month) + String.valueOf(day), Toast.LENGTH_SHORT).show();
             // Do something with the date chosen by the user
         }
     }
@@ -148,5 +159,11 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
+
+    }
+    @Override
+    public void onBackPressed ()
+    {
+        //super.onBackPressed();
     }
 }

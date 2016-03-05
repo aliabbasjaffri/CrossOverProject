@@ -8,4 +8,10 @@
         android:title="@string/action_doctor_conference"
         android:icon="@drawable/ic_action_add"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_admin_signout"
+        android:orderInCategory="2"
+        android:title="@string/signout"
+        app:showAsAction="always" />
 </menu>

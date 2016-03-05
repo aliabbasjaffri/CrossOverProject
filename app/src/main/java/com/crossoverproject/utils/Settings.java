@@ -16,4 +16,10 @@ public class Settings
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.settings_loginMode_key), context.getString(R.string.settings_loginMode_default));
     }
+
+    public static long getUserID(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getLong(context.getString(R.string.settings_userid_key), 0);
+    }
 }

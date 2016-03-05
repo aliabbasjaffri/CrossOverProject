@@ -1,7 +1,11 @@
 package com.crossoverproject.activity;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -25,6 +30,9 @@ import com.crossoverproject.fragment.DoctorActivityFragment;
 import com.crossoverproject.fragment.SignInFragment;
 import com.crossoverproject.fragment.SignUpFragment;
 import com.crossoverproject.provider.ConferenceContract;
+import com.crossoverproject.utils.Settings;
+
+import java.util.Calendar;
 
 public class DoctorActivity extends AppCompatActivity implements DoctorActivityFragment.Callback
 {
@@ -62,6 +70,11 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
             addNewSuggestion();
             return true;
         }
+        else if( id == R.id.action_doctor_signOut )
+        {
+            signOut();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -88,7 +101,7 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
                         String sDate = date.getText().toString();
 
                         ContentValues contentValues = new ContentValues();
-                        contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_USER_ID , "Ali123");
+                        contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_USER_ID , Settings.getUserID(DoctorActivity.this));
                         contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_TOPIC , sTopic);
                         contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_SUMMARY , sSummary);
                         contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_LOCATION_PREFERENCE, sLocation);
@@ -114,6 +127,42 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
     @Override
     public void onItemSelected(Uri uri)
     {
+
+    }
+
+    private void signOut()
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(this.getString(R.string.settings_userid_key)).apply();
+
+        startActivity(new Intent(this, RegistrationLoginActivity.class));
+        this.finish();
+    }
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            Toast.makeText(getActivity(), String.valueOf(year) + String.valueOf(month) + String.valueOf(day), Toast.LENGTH_SHORT).show();
+            // Do something with the date chosen by the user
+        }
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
 
     }
 }
