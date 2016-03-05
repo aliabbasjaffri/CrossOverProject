@@ -24,7 +24,7 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_ADMIN_TABLE =
                 "CREATE TABLE " + AdminEntry.TABLE_NAME + " (" +
                         AdminEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        AdminEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
+                        AdminEntry.COLUMN_USERNAME + " TEXT UNIQUE NOT NULL, " +
                         AdminEntry.COLUMN_PASSWORD + " TEXT NOT NULL, " +
                         AdminEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                         AdminEntry.COLUMN_AGE + " INTEGER NOT NULL, " +
@@ -34,12 +34,12 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_DOCTOR_TABLE =
                 "CREATE TABLE " + DoctorEntry.TABLE_NAME + " (" +
                         DoctorEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        DoctorEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
+                        DoctorEntry.COLUMN_USERNAME + " TEXT UNIQUE NOT NULL, " +
                         DoctorEntry.COLUMN_PASSWORD + " TEXT NOT NULL, " +
                         DoctorEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                         DoctorEntry.COLUMN_AGE + " INTEGER NOT NULL, " +
                         DoctorEntry.COLUMN_SEX + " TEXT NOT NULL, " +
-                        DoctorEntry.COLUMN_PRACTISE_YEARS + " INTEGER NOT NULL, " +
+                        DoctorEntry.COLUMN_PRACTISE_YEARS + " INTEGER DEFAULT 0, " +
                         DoctorEntry.COLUMN_SPECIALIZATION_AREA + " TEXT NOT NULL, " +
                         DoctorEntry.COLUMN_CURRENT_LOCATION + " TEXT NOT NULL " +
                         " );";

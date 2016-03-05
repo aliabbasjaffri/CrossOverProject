@@ -61,6 +61,12 @@ public class SignInFragment extends Fragment
             public void onClick(View v) {
                 sUsername = userName.getText().toString();
                 sPassword = password.getText().toString();
+
+                if( Settings.getLoginRegistrationMode(getActivity()) == getActivity().getString(R.string.admin) )
+                {
+
+                }
+
                 startActivity(new Intent(getActivity(), AdminActivity.class));
             }
         });
