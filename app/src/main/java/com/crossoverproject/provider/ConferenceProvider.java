@@ -316,6 +316,14 @@ public class ConferenceProvider extends ContentProvider
         if ( null == selection ) selection = "1";
         switch (sUriMatcher.match(uri))
         {
+            case ADMIN:
+                rowsDeleted = db.delete(
+                        ConferenceContract.AdminEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case DOCTOR:
+                rowsDeleted = db.delete(
+                        ConferenceContract.DoctorEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case CONFERENCE:
                 rowsDeleted = db.delete(
                         ConferenceContract.ConferenceEntry.TABLE_NAME, selection, selectionArgs);

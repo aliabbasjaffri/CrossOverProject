@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class ConferenceDatabaseHelper extends SQLiteOpenHelper
 {
-    private static final String DATABASE_NAME = "crossoverdatabase.db";
-    private static final int DATABASE_VERSION = 2;
+    public static final String DATABASE_NAME = "crossoverdatabase.db";
+    private static final int DATABASE_VERSION = 3;
 
     public ConferenceDatabaseHelper(Context context)
     {
