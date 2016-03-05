@@ -2,8 +2,11 @@ package com.crossoverproject.activity;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 import com.crossoverproject.R;
 import com.crossoverproject.fragment.AdminActivityFragment;
 import com.crossoverproject.provider.ConferenceContract;
+import com.crossoverproject.utils.Settings;
 
 public class AdminActivity extends AppCompatActivity implements AdminActivityFragment.Callback
 {
@@ -59,6 +63,12 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
             addNewConference();
             return true;
         }
+        else if (id == R.id.action_admin_signout)
+        {
+            signOut();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -85,7 +95,7 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
                         String sDate = date.getText().toString();
 
                         ContentValues contentValues = new ContentValues();
-                        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_USER_ID , "Ali12");
+                        contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_USER_ID , Settings.getUserID(AdminActivity.this));
                         contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_TOPIC , sTopic);
                         contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_SUMMARY , sSummary);
                         contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_LOCATION, sLocation);
@@ -108,8 +118,25 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
         alert.show();
     }
 
+    private void signOut()
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(this.getString(R.string.settings_userid_key)).apply();
+
+        startActivity(new Intent(this, RegistrationLoginActivity.class));
+        this.finish();
+    }
+
     @Override
     public void onItemSelected(Uri uri) {
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+
+        //super.onBackPressed();
     }
 }

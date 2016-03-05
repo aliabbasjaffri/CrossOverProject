@@ -2,6 +2,7 @@ package com.crossoverproject.activity;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.crossoverproject.fragment.DoctorActivityFragment;
 import com.crossoverproject.fragment.SignInFragment;
 import com.crossoverproject.fragment.SignUpFragment;
 import com.crossoverproject.provider.ConferenceContract;
+import com.crossoverproject.utils.Settings;
 
 public class DoctorActivity extends AppCompatActivity implements DoctorActivityFragment.Callback
 {
@@ -62,6 +64,11 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
             addNewSuggestion();
             return true;
         }
+        else if( id == R.id.action_doctor_signOut )
+        {
+            signOut();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -88,7 +95,7 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
                         String sDate = date.getText().toString();
 
                         ContentValues contentValues = new ContentValues();
-                        contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_USER_ID , "Ali123");
+                        contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_USER_ID , Settings.getUserID(DoctorActivity.this));
                         contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_TOPIC , sTopic);
                         contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_SUMMARY , sSummary);
                         contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_LOCATION_PREFERENCE, sLocation);
@@ -115,5 +122,15 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
     public void onItemSelected(Uri uri)
     {
 
+    }
+
+    private void signOut()
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(this.getString(R.string.settings_userid_key)).apply();
+
+        startActivity(new Intent(this, RegistrationLoginActivity.class));
+        this.finish();
     }
 }
