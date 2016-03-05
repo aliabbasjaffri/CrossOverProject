@@ -27,4 +27,6 @@
     <string name="title_activity_doctor">Doctor Portal</string>
     <string name="title_activity_admin">Admin Portal</string>
 
+    <string name="date">Date</string>
+
 </resources>

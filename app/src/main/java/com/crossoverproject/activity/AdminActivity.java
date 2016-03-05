@@ -1,5 +1,10 @@
 package com.crossoverproject.activity;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -13,15 +18,21 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crossoverproject.R;
 import com.crossoverproject.fragment.AdminActivityFragment;
 import com.crossoverproject.provider.ConferenceContract;
 
+import java.util.Calendar;
+
 public class AdminActivity extends AppCompatActivity implements AdminActivityFragment.Callback
 {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,5 +122,31 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     @Override
     public void onItemSelected(Uri uri) {
 
+    }
+
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            Toast.makeText(getActivity(), String.valueOf(year) + String.valueOf(month)+String.valueOf(day), Toast.LENGTH_SHORT ).show();
+            // Do something with the date chosen by the user
+        }
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
     }
 }
