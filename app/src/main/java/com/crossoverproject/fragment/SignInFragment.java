@@ -1,6 +1,7 @@
 package com.crossoverproject.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
+
+import com.crossoverproject.activity.AdminActivity;
 import com.crossoverproject.utils.Settings;
 
 /**
@@ -58,6 +61,7 @@ public class SignInFragment extends Fragment
             public void onClick(View v) {
                 sUsername = userName.getText().toString();
                 sPassword = password.getText().toString();
+                startActivity(new Intent(getActivity(), AdminActivity.class));
             }
         });
 

@@ -3,9 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.crossoverproject.fragment.DoctorActivityFragment">
+    tools:context="com.crossoverproject.fragment.DoctorActivityFragment"
+    android:padding="16dp">
 
     <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Conferences"
+        android:id="@+id/textView5"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp" />
+
     <ListView
         android:id="@+id/doctorActivityListView"
         android:layout_width="match_parent"

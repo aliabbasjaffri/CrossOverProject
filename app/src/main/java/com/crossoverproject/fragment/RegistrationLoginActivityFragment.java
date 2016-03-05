@@ -86,14 +86,14 @@ public class RegistrationLoginActivityFragment extends Fragment
                         if(checker)
                         {
                             getActivity().getSupportFragmentManager()
-                                .beginTransaction().replace(R.id.registrationLoginFragment, new SignInFragment(), SignInFragment.class.getName())
-                                .addToBackStack(SignInFragment.class.getName()).commit();
+                                .beginTransaction().replace(R.id.registrationLoginFragment, new SignInFragment(), SignInFragment.class.getSimpleName())
+                                .addToBackStack(SignInFragment.class.getSimpleName()).commit();
                         }
                         else
                         {
                             getActivity().getSupportFragmentManager()
-                                    .beginTransaction().replace(R.id.registrationLoginFragment, new SignUpFragment(), SignUpFragment.class.getName())
-                                    .addToBackStack(SignUpFragment.class.getName()).commit();
+                                    .beginTransaction().replace(R.id.registrationLoginFragment, new SignUpFragment(), SignUpFragment.class.getSimpleName())
+                                    .addToBackStack(SignUpFragment.class.getSimpleName()).commit();
                         }
                     }
                 })

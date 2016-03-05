@@ -47,23 +47,23 @@ public class ConferenceDatabaseHelper extends SQLiteOpenHelper
         final String SQL_CREATE_CONFERENCE_TABLE =
                 "CREATE TABLE " + ConferenceEntry.TABLE_NAME + " (" +
                         ConferenceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        ConferenceEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
+                        ConferenceEntry.COLUMN_USER_ID + " INTEGER NOT NULL, " +
                         ConferenceEntry.COLUMN_TOPIC + " TEXT NOT NULL, " +
                         ConferenceEntry.COLUMN_SUMMARY + " TEXT NOT NULL, " +
                         ConferenceEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
                         ConferenceEntry.COLUMN_LOCATION + " TEXT NOT NULL, " +
-                        ConferenceEntry.COLUMN_READ_TAG + " TEXT " +
+                        ConferenceEntry.COLUMN_READ_TAG + " TEXT DEFAULT '1' " +
                         " );";
 
         final String SQL_CREATE_SUGGESTION_TABLE =
                 "CREATE TABLE " + SuggestionEntry.TABLE_NAME + " (" +
                         SuggestionEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        SuggestionEntry.COLUMN_USER_ID + " INTEGER UNIQUE NOT NULL, " +
+                        SuggestionEntry.COLUMN_USER_ID + " INTEGER NOT NULL, " +
                         SuggestionEntry.COLUMN_TOPIC + " TEXT NOT NULL, " +
                         SuggestionEntry.COLUMN_SUMMARY + " TEXT NOT NULL, " +
                         SuggestionEntry.COLUMN_AVAILABILITY_DATE + " INTEGER NOT NULL, " +
                         SuggestionEntry.COLUMN_LOCATION_PREFERENCE + " TEXT NOT NULL, " +
-                        SuggestionEntry.COLUMN_READ_TAG + " TEXT " +
+                        SuggestionEntry.COLUMN_READ_TAG + " TEXT DEFAULT '1' " +
                         " );";
 
         db.execSQL(SQL_CREATE_ADMIN_TABLE);
