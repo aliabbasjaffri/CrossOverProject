@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.crossoverproject.R;
+import com.crossoverproject.activity.AdminActivity;
 import com.crossoverproject.adapter.SuggestionAdapter;
 import com.crossoverproject.provider.ConferenceContract;
 
@@ -31,24 +32,6 @@ public class AdminActivityFragment extends Fragment  implements LoaderManager.Lo
     SuggestionAdapter mSuggestionAdapter = null;
     int mPosition = ListView.INVALID_POSITION;
     private static final String SELECTED_KEY = "selectedPosition";
-
-    private static final String[] SUGGESTION_COLUMNS = {
-            ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry._ID,
-            ConferenceContract.SuggestionEntry.COLUMN_USER_ID,
-            ConferenceContract.SuggestionEntry.COLUMN_TOPIC,
-            ConferenceContract.SuggestionEntry.COLUMN_SUMMARY,
-            ConferenceContract.SuggestionEntry.COLUMN_AVAILABILITY_DATE,
-            ConferenceContract.SuggestionEntry.COLUMN_LOCATION_PREFERENCE,
-            ConferenceContract.SuggestionEntry.COLUMN_READ_TAG
-    };
-
-    public static final int COLUMN_SUGGESTION_ID = 0;
-    public static final int COLUMN_USER_ID = 1;
-    public static final int COLUMN_TOPIC = 2;
-    public static final int COLUMN_SUMMARY = 3;
-    public static final int COLUMN_AVAILABILITY_DATE = 4;
-    public static final int COLUMN_LOCATION_PREFERENCE = 5;
-    public static final int COLUMN_READ_TAG = 6;
 
     public AdminActivityFragment() {
     }
@@ -70,7 +53,7 @@ public class AdminActivityFragment extends Fragment  implements LoaderManager.Lo
                 {
                     ((Callback) getActivity())
                             .onItemSelected(ConferenceContract.SuggestionEntry
-                                            .buildSuggestionUri(cursor.getLong(COLUMN_SUGGESTION_ID))
+                                            .buildSuggestionUri(cursor.getLong(AdminActivity.COLUMN_SUGGESTION_ID))
                             );
                 }
             }
@@ -90,7 +73,7 @@ public class AdminActivityFragment extends Fragment  implements LoaderManager.Lo
     {
         String sortOrder = ConferenceContract.SuggestionEntry._ID + " ASC";
         Uri SuggestionUri = ConferenceContract.SuggestionEntry.CONTENT_URI;
-        return new CursorLoader(getActivity(), SuggestionUri, SUGGESTION_COLUMNS, null, null, sortOrder);
+        return new CursorLoader(getActivity(), SuggestionUri, AdminActivity.SUGGESTION_COLUMNS, null, null, sortOrder);
     }
 
     @Override

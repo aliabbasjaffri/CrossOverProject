@@ -32,6 +32,7 @@ import com.crossoverproject.fragment.DoctorActivityFragment;
 import com.crossoverproject.fragment.SignInFragment;
 import com.crossoverproject.fragment.SignUpFragment;
 import com.crossoverproject.fragment.ViewConferences;
+import com.crossoverproject.fragment.ViewSuggestions;
 import com.crossoverproject.provider.ConferenceContract;
 import com.crossoverproject.utils.Settings;
 
@@ -79,6 +80,10 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
                         .setAction("Action", null).show();
             }
         });
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.doctorActivityFrameLayout, new DoctorActivityFragment(), DoctorActivityFragment.class.getSimpleName())
+                .commit();
     }
 
     @Override
@@ -222,9 +227,8 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
 
     private void openSuggestions() {
         getSupportFragmentManager()
-                .beginTransaction().replace(R.id.adminActivityFrameLayout, new ViewConferences() , ViewConferences.class.getSimpleName())
-                .addToBackStack(ViewConferences.class.getSimpleName()).commit();
-        Toast.makeText(DoctorActivity.this, "Opening Suggestions", Toast.LENGTH_SHORT).show();
+                .beginTransaction().replace(R.id.doctorActivityFrameLayout, new ViewSuggestions() , ViewSuggestions.class.getSimpleName())
+                .addToBackStack(ViewSuggestions.class.getSimpleName()).commit();
     }
 
     public static class DatePickerFragment extends DialogFragment
@@ -260,11 +264,9 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
 
     @Override
     public void onBackPressed() {
-
-    }
-
-    private void dateExtractor(String date)
-    {
-
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
     }
 }

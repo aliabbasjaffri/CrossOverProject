@@ -6,9 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
-
 import com.crossoverproject.R;
-import com.crossoverproject.fragment.AdminActivityFragment;
+import com.crossoverproject.activity.AdminActivity;
 import com.crossoverproject.helper.SuggestionViewHolder;
 
 /**
@@ -36,16 +35,16 @@ public class SuggestionAdapter extends CursorAdapter
     {
         SuggestionViewHolder viewHolder = (SuggestionViewHolder) view.getTag();
 
-        String topic = cursor.getString(AdminActivityFragment.COLUMN_TOPIC);
+        String topic = cursor.getString(AdminActivity.COLUMN_TOPIC);
         viewHolder.topic.setText(topic);
 
-        String summary = cursor.getString(AdminActivityFragment.COLUMN_SUMMARY);
+        String summary = cursor.getString(AdminActivity.COLUMN_SUMMARY);
         viewHolder.summary.setText(summary);
 
-        String location = cursor.getString(AdminActivityFragment.COLUMN_LOCATION_PREFERENCE);
+        String location = cursor.getString(AdminActivity.COLUMN_LOCATION_PREFERENCE);
         viewHolder.location.setText(location);
 
-        String date = cursor.getString(AdminActivityFragment.COLUMN_AVAILABILITY_DATE);
+        String date = cursor.getString(AdminActivity.COLUMN_AVAILABILITY_DATE);
         viewHolder.date.setText(date);
     }
 }

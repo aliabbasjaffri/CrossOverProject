@@ -39,6 +39,24 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     EditText location;
     static TextView date;
 
+    public static final String[] SUGGESTION_COLUMNS = {
+            ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry._ID,
+            ConferenceContract.SuggestionEntry.COLUMN_USER_ID,
+            ConferenceContract.SuggestionEntry.COLUMN_TOPIC,
+            ConferenceContract.SuggestionEntry.COLUMN_SUMMARY,
+            ConferenceContract.SuggestionEntry.COLUMN_AVAILABILITY_DATE,
+            ConferenceContract.SuggestionEntry.COLUMN_LOCATION_PREFERENCE,
+            ConferenceContract.SuggestionEntry.COLUMN_READ_TAG
+    };
+
+    public static final int COLUMN_SUGGESTION_ID = 0;
+    public static final int COLUMN_USER_ID = 1;
+    public static final int COLUMN_TOPIC = 2;
+    public static final int COLUMN_SUMMARY = 3;
+    public static final int COLUMN_AVAILABILITY_DATE = 4;
+    public static final int COLUMN_LOCATION_PREFERENCE = 5;
+    public static final int COLUMN_READ_TAG = 6;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

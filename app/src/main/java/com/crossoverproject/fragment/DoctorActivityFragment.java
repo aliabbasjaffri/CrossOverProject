@@ -30,10 +30,7 @@ public class DoctorActivityFragment extends Fragment implements LoaderManager.Lo
 
     private ListView listView = null;
     ConferenceAdapter mConferenceAdapter = null;
-    private static final String SELECTED_KEY = "selectedPosition";
     int mPosition = ListView.INVALID_POSITION;
-
-
 
     public DoctorActivityFragment() {
     }
