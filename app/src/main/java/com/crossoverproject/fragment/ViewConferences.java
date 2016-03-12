@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.crossoverproject.R;
+import com.crossoverproject.activity.AdminActivity;
 
 
 public class ViewConferences extends Fragment
@@ -21,7 +22,6 @@ public class ViewConferences extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -30,8 +30,6 @@ public class ViewConferences extends Fragment
         View view = inflater.inflate(R.layout.fragment_view_conferences, container, false);
         listView = (ListView) view.findViewById(R.id.viewConferencesListView);
 
-
         return view;
     }
-
 }

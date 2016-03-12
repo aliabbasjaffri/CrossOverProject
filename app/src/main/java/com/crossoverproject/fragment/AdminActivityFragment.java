@@ -29,7 +29,7 @@ public class AdminActivityFragment extends Fragment  implements LoaderManager.Lo
     private ListView listView = null;
     private SharedPreferences sharedPref = null;
     SuggestionAdapter mSuggestionAdapter = null;
-    private int mPosition = ListView.INVALID_POSITION;
+    int mPosition = ListView.INVALID_POSITION;
     private static final String SELECTED_KEY = "selectedPosition";
 
     private static final String[] SUGGESTION_COLUMNS = {
@@ -50,9 +50,7 @@ public class AdminActivityFragment extends Fragment  implements LoaderManager.Lo
     public static final int COLUMN_LOCATION_PREFERENCE = 5;
     public static final int COLUMN_READ_TAG = 6;
 
-    public AdminActivityFragment()
-    {
-
+    public AdminActivityFragment() {
     }
 
     @Override
@@ -75,7 +73,6 @@ public class AdminActivityFragment extends Fragment  implements LoaderManager.Lo
                                             .buildSuggestionUri(cursor.getLong(COLUMN_SUGGESTION_ID))
                             );
                 }
-
             }
         });
         return view;

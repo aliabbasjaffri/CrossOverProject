@@ -38,16 +38,16 @@ public class ConferenceAdapter extends CursorAdapter
     {
         ConferenceViewHolder viewHolder = (ConferenceViewHolder) view.getTag();
 
-        String topic = cursor.getString(DoctorActivityFragment.COLUMN_TOPIC);
+        String topic = cursor.getString(DoctorActivity.COLUMN_TOPIC);
         viewHolder.topic.setText(topic);
 
-        String summary = cursor.getString(DoctorActivityFragment.COLUMN_SUMMARY);
+        String summary = cursor.getString(DoctorActivity.COLUMN_SUMMARY);
         viewHolder.summary.setText(summary);
 
-        String location = cursor.getString(DoctorActivityFragment.COLUMN_LOCATION);
+        String location = cursor.getString(DoctorActivity.COLUMN_LOCATION);
         viewHolder.location.setText(location);
 
-        String date = cursor.getString(DoctorActivityFragment.COLUMN_DATE);
+        String date = cursor.getString(DoctorActivity.COLUMN_DATE);
         viewHolder.date.setText(date);
     }
 }

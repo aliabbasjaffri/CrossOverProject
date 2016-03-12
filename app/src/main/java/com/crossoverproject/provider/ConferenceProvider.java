@@ -29,8 +29,10 @@ public class ConferenceProvider extends ContentProvider
     static final int DOCTOR_WITH_USERNAME = 302;
 
     static final int CONFERENCE = 400;
+    static final int CONFERENCE_WITH_ID = 401;
 
     static final int SUGGESTION = 500;
+    static final int SUGGESTION_WITH_ID = 501;
 
     private static final SQLiteQueryBuilder sUserwithAdmin;
     private static final SQLiteQueryBuilder sUserwithDoctor;
@@ -61,6 +63,12 @@ public class ConferenceProvider extends ContentProvider
     private static final String sDoctorNameSelection =
             ConferenceContract.DoctorEntry.TABLE_NAME + "." + ConferenceContract.DoctorEntry.COLUMN_USERNAME + " = ? ";
 
+    private static final String sConferenceIDSelection =
+            ConferenceContract.ConferenceEntry.TABLE_NAME + "." + ConferenceContract.ConferenceEntry._ID + " = ? ";
+
+    private static final String sSuggestionIDSelection =
+            ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry._ID + " = ? ";
+
     static UriMatcher buildUriMatcher()
     {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -75,8 +83,11 @@ public class ConferenceProvider extends ContentProvider
         matcher.addURI(authority, ConferenceContract.PATH_DOCTOR + "/*/#", DOCTOR_WITH_USERNAME);
 
         matcher.addURI(authority, ConferenceContract.PATH_CONFERENCE, CONFERENCE);
+        matcher.addURI(authority, ConferenceContract.PATH_CONFERENCE + "/*", CONFERENCE_WITH_ID);
 
         matcher.addURI(authority, ConferenceContract.PATH_SUGGESTION, SUGGESTION);
+        matcher.addURI(authority, ConferenceContract.PATH_SUGGESTION + "/*", SUGGESTION_WITH_ID);
+
         return matcher;
     }
 
@@ -133,6 +144,34 @@ public class ConferenceProvider extends ContentProvider
         return sUserwithDoctor.query(mConferenceDatabaseHelper.getReadableDatabase(),
                 projection,
                 sDoctorIDSelection,
+                new String[]{Long.toString(id)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getConferenceByID(Uri uri, String[] projection, String sortOrder)
+    {
+        long id = ConferenceContract.ConferenceEntry.getConferenceIDFromUri(uri);
+        return mConferenceDatabaseHelper.getReadableDatabase().query(
+                ConferenceContract.ConferenceEntry.TABLE_NAME,
+                projection,
+                sConferenceIDSelection,
+                new String[]{Long.toString(id)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getSuggestionByID(Uri uri, String[] projection, String sortOrder)
+    {
+        long id = ConferenceContract.SuggestionEntry.getSuggestionIDFromUri(uri);
+        return mConferenceDatabaseHelper.getReadableDatabase().query(
+                ConferenceContract.SuggestionEntry.TABLE_NAME,
+                projection,
+                sSuggestionIDSelection,
                 new String[]{Long.toString(id)},
                 null,
                 null,
@@ -206,6 +245,11 @@ public class ConferenceProvider extends ContentProvider
                 break;
             }
 
+            case CONFERENCE_WITH_ID:{
+                retCursor = getConferenceByID(uri , projection , sortOrder);
+                break;
+            }
+
             case SUGGESTION: {
                 retCursor = mConferenceDatabaseHelper.getReadableDatabase().query(
                         ConferenceContract.SuggestionEntry.TABLE_NAME,
@@ -216,6 +260,11 @@ public class ConferenceProvider extends ContentProvider
                         null,
                         sortOrder
                 );
+                break;
+            }
+
+            case SUGGESTION_WITH_ID:{
+                retCursor = getSuggestionByID(uri , projection , sortOrder);
                 break;
             }
 
@@ -248,7 +297,11 @@ public class ConferenceProvider extends ContentProvider
                 return ConferenceContract.DoctorEntry.CONTENT_ITEM_TYPE;
             case CONFERENCE:
                 return ConferenceContract.ConferenceEntry.CONTENT_TYPE;
+            case CONFERENCE_WITH_ID:
+                return ConferenceContract.ConferenceEntry.CONTENT_TYPE;
             case SUGGESTION:
+                return ConferenceContract.SuggestionEntry.CONTENT_TYPE;
+            case SUGGESTION_WITH_ID:
                 return ConferenceContract.SuggestionEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

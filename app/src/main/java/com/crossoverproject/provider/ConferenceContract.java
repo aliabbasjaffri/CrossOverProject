@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.format.Time;
+import android.widget.Toast;
 
 /**
  * Created by aliabbasjaffri on 02/03/16.
@@ -113,6 +114,10 @@ public class ConferenceContract
         {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static long getConferenceIDFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
+        }
     }
 
     public static final class SuggestionEntry implements BaseColumns
@@ -135,6 +140,10 @@ public class ConferenceContract
         public static Uri buildSuggestionUri(long id)
         {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static long getSuggestionIDFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
         }
     }
 }

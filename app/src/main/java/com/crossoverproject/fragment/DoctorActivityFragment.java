@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.crossoverproject.R;
+import com.crossoverproject.activity.DoctorActivity;
 import com.crossoverproject.adapter.ConferenceAdapter;
 import com.crossoverproject.provider.ConferenceContract;
 
@@ -32,28 +33,10 @@ public class DoctorActivityFragment extends Fragment implements LoaderManager.Lo
     private static final String SELECTED_KEY = "selectedPosition";
     int mPosition = ListView.INVALID_POSITION;
 
-    private static final String[] CONFERENCE_COLUMNS = {
-            ConferenceContract.ConferenceEntry.TABLE_NAME + "." + ConferenceContract.ConferenceEntry._ID,
-            ConferenceContract.ConferenceEntry.COLUMN_USER_ID,
-            ConferenceContract.ConferenceEntry.COLUMN_TOPIC,
-            ConferenceContract.ConferenceEntry.COLUMN_SUMMARY,
-            ConferenceContract.ConferenceEntry.COLUMN_DATE,
-            ConferenceContract.ConferenceEntry.COLUMN_LOCATION,
-            ConferenceContract.ConferenceEntry.COLUMN_READ_TAG
-    };
 
-    public static final int COLUMN_CONFERENCE_ID = 0;
-    public static final int COLUMN_USER_ID = 1;
-    public static final int COLUMN_TOPIC = 2;
-    public static final int COLUMN_SUMMARY = 3;
-    public static final int COLUMN_DATE = 4;
-    public static final int COLUMN_LOCATION = 5;
-    public static final int COLUMN_READ_TAG = 6;
 
-    public DoctorActivityFragment()
-    {
+    public DoctorActivityFragment() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState)
@@ -73,10 +56,9 @@ public class DoctorActivityFragment extends Fragment implements LoaderManager.Lo
                 {
                     ((Callback) getActivity())
                             .onItemSelected(ConferenceContract.ConferenceEntry
-                                    .buildConferenceUri(cursor.getLong(COLUMN_CONFERENCE_ID))
+                                    .buildConferenceUri(cursor.getLong(DoctorActivity.COLUMN_CONFERENCE_ID))
                             );
                 }
-
             }
         });
         return view;
@@ -93,7 +75,7 @@ public class DoctorActivityFragment extends Fragment implements LoaderManager.Lo
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String sortOrder = ConferenceContract.ConferenceEntry._ID+ " ASC";
         Uri ConferenceUri = ConferenceContract.ConferenceEntry.CONTENT_URI;
-        return new CursorLoader(getActivity(), ConferenceUri, CONFERENCE_COLUMNS , null, null, sortOrder);
+        return new CursorLoader(getActivity(), ConferenceUri, DoctorActivity.CONFERENCE_COLUMNS , null, null, sortOrder);
     }
 
     @Override
