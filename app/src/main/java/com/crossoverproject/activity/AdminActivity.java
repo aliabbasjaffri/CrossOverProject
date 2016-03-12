@@ -69,13 +69,16 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         int id = item.getItemId();
-
         if (id == R.id.action_add_conference) {
             addNewConference();
             return true;
-        } else if (id == R.id.action_admin_signout) {
+        } else if (id == R.id.action_view_conference) {
+            openConferences();
+            return true;
+        }else if (id == R.id.action_admin_signout) {
             signOut();
             return true;
         }
@@ -133,6 +136,11 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
 
         startActivity(new Intent(this, RegistrationLoginActivity.class));
         this.finish();
+    }
+
+    private void openConferences()
+    {
+
     }
 
     @Override

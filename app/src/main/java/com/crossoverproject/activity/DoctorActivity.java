@@ -75,19 +75,17 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-
         if (id == R.id.action_add_suggestion)
         {
             addNewSuggestion();
             return true;
-        }
-
-        else if( id == R.id.action_doctor_signOut )
-        {
+        } else if( id == R.id.action_view_suggestion ) {
+            openSuggestions();
+            return true;
+        }else if( id == R.id.action_doctor_signOut ) {
             signOut();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -153,6 +151,12 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
         startActivity(new Intent(this, RegistrationLoginActivity.class));
         this.finish();
     }
+
+    private void openSuggestions()
+    {
+
+    }
+
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 

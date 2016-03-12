@@ -28,10 +28,9 @@ public class DoctorActivityFragment extends Fragment implements LoaderManager.Lo
     public static final String LOG_TAG = DoctorActivityFragment.class.getSimpleName();
 
     private ListView listView = null;
-    private SharedPreferences sharedPref = null;
     ConferenceAdapter mConferenceAdapter = null;
-    private int mPosition = ListView.INVALID_POSITION;
     private static final String SELECTED_KEY = "selectedPosition";
+    int mPosition = ListView.INVALID_POSITION;
 
     private static final String[] CONFERENCE_COLUMNS = {
             ConferenceContract.ConferenceEntry.TABLE_NAME + "." + ConferenceContract.ConferenceEntry._ID,
