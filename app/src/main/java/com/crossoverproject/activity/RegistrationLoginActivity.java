@@ -6,10 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-
 import com.crossoverproject.R;
 import com.crossoverproject.fragment.RegistrationLoginActivityFragment;
-import com.crossoverproject.fragment.SignInFragment;
 
 public class RegistrationLoginActivity extends AppCompatActivity
 {
@@ -21,7 +19,6 @@ public class RegistrationLoginActivity extends AppCompatActivity
         setContentView(R.layout.activity_registration_login);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setToolbarHomeAccess(false);
 
         getSupportFragmentManager()
                 .beginTransaction().add(R.id.registrationLoginFragment, RegistrationLoginActivityFragment.newInstance(), RegistrationLoginActivityFragment.class.getSimpleName())
@@ -37,15 +34,12 @@ public class RegistrationLoginActivity extends AppCompatActivity
         });
     }
 
-    public void setToolbarHomeAccess(Boolean enable)
+    @Override
+    public void onBackPressed ()
     {
-        if(enable)
-            toolbar.setVisibility(View.VISIBLE);
-        else
-            toolbar.setVisibility(View.INVISIBLE);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(enable);
-        getSupportActionBar().setDisplayShowHomeEnabled(enable);
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
     }
-
 }

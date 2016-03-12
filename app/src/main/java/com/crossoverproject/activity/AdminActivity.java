@@ -1,19 +1,12 @@
 package com.crossoverproject.activity;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.Fragment;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.CharArrayBuffer;
-import android.database.ContentObserver;
-import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,15 +19,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.crossoverproject.R;
 import com.crossoverproject.fragment.AdminActivityFragment;
-import com.crossoverproject.fragment.RegistrationLoginActivityFragment;
 import com.crossoverproject.fragment.ViewConferences;
 import com.crossoverproject.provider.ConferenceContract;
 import com.crossoverproject.utils.Settings;
@@ -56,9 +46,6 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +55,9 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
             }
         });
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.adminActivityFrameLayout, new AdminActivityFragment(), AdminActivityFragment.class.getSimpleName())
-                .addToBackStack(AdminActivityFragment.class.getSimpleName()).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.adminActivityFrameLayout, new AdminActivityFragment(), AdminActivityFragment.class.getSimpleName())
+                .commit();
     }
 
     @Override
@@ -155,16 +143,15 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
 
     private void openConferences() {
         getSupportFragmentManager()
-                .beginTransaction().replace(R.id.adminActivityFrameLayout, new ViewConferences() , ViewConferences.class.getSimpleName())
+                .beginTransaction()
                 .addToBackStack(ViewConferences.class.getSimpleName())
+                .replace(R.id.adminActivityFrameLayout, new ViewConferences(), ViewConferences.class.getSimpleName())
                 .commit();
-        Toast.makeText(AdminActivity.this, "Opening Conferences" , Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemSelected(Uri uri)
     {
-
         Toast.makeText(AdminActivity.this, uri.toString() , Toast.LENGTH_SHORT).show();
     }
 
@@ -204,6 +191,9 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     @Override
     public void onBackPressed ()
     {
-
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
     }
 }
