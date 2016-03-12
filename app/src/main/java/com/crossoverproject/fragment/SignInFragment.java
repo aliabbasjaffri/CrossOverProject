@@ -142,6 +142,7 @@ public class SignInFragment extends Fragment
             }
             else
             {
+                Toast.makeText(getActivity(), "No such user exists.", Toast.LENGTH_SHORT).show();
                 cursor.close();
                 return false;
             }
@@ -185,6 +186,7 @@ public class SignInFragment extends Fragment
                 return true;
             }
             else {
+                Toast.makeText(getActivity(), "No such user exists.", Toast.LENGTH_SHORT).show();
                 cursor.close();
                 return false;
             }

@@ -23,12 +23,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crossoverproject.R;
 import com.crossoverproject.fragment.DoctorActivityFragment;
 import com.crossoverproject.fragment.SignInFragment;
 import com.crossoverproject.fragment.SignUpFragment;
+import com.crossoverproject.fragment.ViewConferences;
 import com.crossoverproject.provider.ConferenceContract;
 import com.crossoverproject.utils.Settings;
 
@@ -36,12 +38,21 @@ import java.util.Calendar;
 
 public class DoctorActivity extends AppCompatActivity implements DoctorActivityFragment.Callback
 {
+    public static StringBuilder global_string = new StringBuilder();
+    EditText topic;
+    EditText summary;
+    EditText location;
+    static TextView date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +81,7 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
             addNewSuggestion();
             return true;
         }
+
         else if( id == R.id.action_doctor_signOut )
         {
             signOut();
@@ -86,10 +98,10 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(promptView);
 
-        final EditText topic = (EditText)promptView.findViewById(R.id.newSuggestionTopicEditText);
-        final EditText summary = (EditText)promptView.findViewById(R.id.newSuggestionSummaryEditText);
-        final EditText location = (EditText)promptView.findViewById(R.id.newSuggestionLocationEditText);
-        final EditText date = (EditText)promptView.findViewById(R.id.newSuggestionDateEditText);
+        topic = (EditText)promptView.findViewById(R.id.newSuggestionTopicEditText);
+        summary = (EditText)promptView.findViewById(R.id.newSuggestionSummaryEditText);
+        location = (EditText)promptView.findViewById(R.id.newSuggestionLocationEditText);
+        date = (TextView)promptView.findViewById(R.id.newSuggestionDateTextView);
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
@@ -98,7 +110,9 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
                         String sTopic = topic.getText().toString();
                         String sSummary = summary.getText().toString();
                         String sLocation = location.getText().toString();
-                        String sDate = date.getText().toString();
+                        date.setText(global_string.toString());
+                        String sDate = global_string.toString();
+
 
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_USER_ID , Settings.getUserID(DoctorActivity.this));
@@ -154,15 +168,20 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            Toast.makeText(getActivity(), String.valueOf(year) + String.valueOf(month) + String.valueOf(day), Toast.LENGTH_SHORT).show();
-            // Do something with the date chosen by the user
+        public void onDateSet(DatePicker view, int year, int month, int day)
+        {
+            global_string= new StringBuilder().append(month+1).append("-").append(day).append("-").append(year).append(" ");
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            date.setText(global_string.toString());
         }
     }
 
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
-
     }
 }

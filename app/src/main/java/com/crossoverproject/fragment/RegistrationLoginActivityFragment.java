@@ -81,7 +81,6 @@ public class RegistrationLoginActivityFragment extends Fragment
                         selectedRole = radioRoleButton.getText().toString();
 
                         editor.putString(getActivity().getString(R.string.settings_loginMode_key) , selectedRole).apply();
-                        Toast.makeText(getContext() , selectedRole , Toast.LENGTH_SHORT).show();
 
                         if(checker)
                         {

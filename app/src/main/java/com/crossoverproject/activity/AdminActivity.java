@@ -34,7 +34,13 @@ import com.crossoverproject.utils.Settings;
 
 import java.util.Calendar;
 
-public class AdminActivity extends AppCompatActivity implements AdminActivityFragment.Callback {
+public class AdminActivity extends AppCompatActivity implements AdminActivityFragment.Callback
+{
+    public static StringBuilder global_string = new StringBuilder();
+    EditText topic;
+    EditText summary;
+    EditText location;
+    static TextView date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +79,6 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
             signOut();
             return true;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -84,10 +88,10 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(promptView);
 
-        final EditText topic = (EditText) promptView.findViewById(R.id.newConferenceTopicEditText);
-        final EditText summary = (EditText) promptView.findViewById(R.id.newConferenceSummaryEditText);
-        final EditText location = (EditText) promptView.findViewById(R.id.newConferenceLocationEditText);
-        final EditText date = (EditText) promptView.findViewById(R.id.newConferenceDateEditText);
+        topic = (EditText) promptView.findViewById(R.id.newConferenceTopicEditText);
+        summary = (EditText) promptView.findViewById(R.id.newConferenceSummaryEditText);
+        location = (EditText) promptView.findViewById(R.id.newConferenceLocationEditText);
+        date = (TextView) promptView.findViewById(R.id.newConferenceDateTextView);
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
@@ -95,7 +99,8 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
                         String sTopic = topic.getText().toString();
                         String sSummary = summary.getText().toString();
                         String sLocation = location.getText().toString();
-                        String sDate = date.getText().toString();
+                        date.setText(global_string.toString());
+                        String sDate = global_string.toString();
 
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_USER_ID, Settings.getUserID(AdminActivity.this));
@@ -150,20 +155,27 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            Toast.makeText(getActivity(), String.valueOf(year) + String.valueOf(month) + String.valueOf(day), Toast.LENGTH_SHORT).show();
-            // Do something with the date chosen by the user
+        public void onDateSet(DatePicker view, int year, int month, int day)
+        {
+            global_string = new StringBuilder().append(month+1).append("-").append(day).append("-").append(year).append(" ");
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            date.setText(global_string.toString());
         }
     }
 
-    public void showDatePickerDialog(View v) {
+    public void showDatePickerDialog(View v)
+    {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
-
     }
+
     @Override
     public void onBackPressed ()
     {
-        //super.onBackPressed();
+
     }
 }

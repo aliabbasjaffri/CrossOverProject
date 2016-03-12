@@ -35,15 +35,17 @@
         android:layout_gravity="center_horizontal"
         android:hint="Location" />
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/newConferenceDateEditText"
+        android:id="@+id/newConferenceDateTextView"
         android:layout_gravity="center_horizontal"
-        android:hint="Date" />
+        android:text="Selected Date"
+        android:minLines="3"
+        android:gravity="center_vertical|center_horizontal" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/date"
         android:onClick="showDatePickerDialog" />
