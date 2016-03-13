@@ -258,8 +258,7 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "datePicker");
+        new DatePickerFragment().show(getFragmentManager(), "datePicker");
     }
 
     @Override

@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,13 +32,14 @@ import com.crossoverproject.utils.Settings;
 
 import java.util.Calendar;
 
-public class AdminActivity extends AppCompatActivity implements AdminActivityFragment.Callback
+public class AdminActivity extends AppCompatActivity implements AdminActivityFragment.Callback , ViewConferences.ConferenceCallback
 {
     public static StringBuilder global_string = new StringBuilder();
     EditText topic;
     EditText summary;
     EditText location;
     static TextView date;
+    Button dateButton;
 
     public static final String[] SUGGESTION_COLUMNS = {
             ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry._ID,
@@ -111,6 +113,13 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
         summary = (EditText) promptView.findViewById(R.id.newConferenceSummaryEditText);
         location = (EditText) promptView.findViewById(R.id.newConferenceLocationEditText);
         date = (TextView) promptView.findViewById(R.id.newConferenceDateTextView);
+        dateButton = (Button) promptView.findViewById(R.id.newConferenceDatePickerButton);
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerFragment().show(getFragmentManager(), "datePicker");
+            }
+        });
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
@@ -173,6 +182,20 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
         Toast.makeText(AdminActivity.this, uri.toString() , Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onConferenceSelected(Uri uri) {
+        Toast.makeText(AdminActivity.this, uri.toString() , Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed ()
+    {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+    }
+
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
@@ -197,21 +220,6 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
         public void onDestroyView() {
             super.onDestroyView();
             date.setText(global_string.toString());
-        }
-    }
-
-    public void showDatePickerDialog(View v)
-    {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "datePicker");
-    }
-
-    @Override
-    public void onBackPressed ()
-    {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
-        {
-            getSupportFragmentManager().popBackStackImmediate();
         }
     }
 }

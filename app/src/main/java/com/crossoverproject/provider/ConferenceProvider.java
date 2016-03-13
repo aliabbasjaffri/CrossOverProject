@@ -63,11 +63,17 @@ public class ConferenceProvider extends ContentProvider
     private static final String sDoctorNameSelection =
             ConferenceContract.DoctorEntry.TABLE_NAME + "." + ConferenceContract.DoctorEntry.COLUMN_USERNAME + " = ? ";
 
-    private static final String sConferenceIDSelection =
+    public static final String sConferenceIDSelection =
             ConferenceContract.ConferenceEntry.TABLE_NAME + "." + ConferenceContract.ConferenceEntry._ID + " = ? ";
+
+    public static final String sConferenceByUserIDSelection =
+            ConferenceContract.ConferenceEntry.TABLE_NAME + "." + ConferenceContract.ConferenceEntry.COLUMN_USER_ID + " = ? ";
 
     private static final String sSuggestionIDSelection =
             ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry._ID + " = ? ";
+
+    private static final String sSuggestionByUserIDSelection =
+            ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry.COLUMN_USER_ID + " = ? ";
 
     static UriMatcher buildUriMatcher()
     {

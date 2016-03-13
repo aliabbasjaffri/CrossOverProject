@@ -45,12 +45,10 @@ public class AdminActivityFragment extends Fragment  implements LoaderManager.Lo
         listView.setAdapter(mSuggestionAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
-                if(cursor != null)
-                {
+                if (cursor != null) {
                     ((Callback) getActivity())
                             .onItemSelected(ConferenceContract.SuggestionEntry
                                             .buildSuggestionUri(cursor.getLong(AdminActivity.COLUMN_SUGGESTION_ID))
