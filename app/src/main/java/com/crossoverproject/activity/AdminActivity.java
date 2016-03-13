@@ -111,15 +111,13 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     }
 
     @Override
-    public void onItemSelected(Uri uri)
-    {
+    public void onItemSelected(Uri uri) {
         Toast.makeText(AdminActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConferenceSelected(Uri uri) {
-        editConference( uri );
-        Toast.makeText(AdminActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
+        editConference(uri);
     }
 
     @Override
@@ -221,7 +219,6 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
         {
             cursor.moveToFirst();
             conferenceID = Long.toString(ConferenceContract.ConferenceEntry.getConferenceIDFromUri(uri));
-            Log.v("Conference ID" , conferenceID);
             updateTopic.setText(cursor.getString(DoctorActivity.COLUMN_TOPIC));
             updateSummary.setText(cursor.getString(DoctorActivity.COLUMN_SUMMARY));
             updateLocation.setText(cursor.getString(DoctorActivity.COLUMN_LOCATION));
@@ -245,7 +242,16 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
                         updateDate.setText(globalString.toString());
                         String s_Date = globalString.toString();
 
-                        if (!s_Topic.equals("") && !s_Summary.equals("") && !s_Location.equals("") && !s_Date.equals("")) {
+                        /*if (updateTopic.getText().toString().length() == 0 ||
+                                updateSummary.getText().toString().length() == 0 ||
+                                updateLocation.getText().toString().length() == 0 ||
+                                updateDate.getText().toString().length() == 0)
+                        {
+                            Toast.makeText(AdminActivity.this, "Please Enter all fields", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                        else{
+                        */
                             ContentValues contentValues = new ContentValues();
                             contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_USER_ID, Settings.getUserID(AdminActivity.this));
                             contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_TOPIC, s_Topic);
@@ -259,15 +265,40 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
 
                             Toast.makeText(AdminActivity.this, updated + " Conference is Updated.", Toast.LENGTH_SHORT)
                                     .show();
-                        }
-                        else
-                            Toast.makeText(AdminActivity.this, "Please Enter all fields", Toast.LENGTH_SHORT)
-                                    .show();
+                        //}
+
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                    }
+                })
+                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new AlertDialog.Builder(AdminActivity.this)
+                                .setTitle("Delete entry")
+                                .setMessage("Are you sure you want to delete this entry?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        updated = getContentResolver()
+                                                .delete(ConferenceContract.ConferenceEntry.CONTENT_URI,
+                                                        ConferenceProvider.sConferenceIDSelection,
+                                                        new String[]{conferenceID});
+
+                                        Toast.makeText(AdminActivity.this, updated + " Conference has been Deleted.",
+                                                Toast.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
                     }
                 });
 
