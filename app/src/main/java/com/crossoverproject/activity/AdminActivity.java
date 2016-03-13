@@ -239,19 +239,18 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
                         String s_Topic = updateTopic.getText().toString();
                         String s_Summary = updateSummary.getText().toString();
                         String s_Location = updateLocation.getText().toString();
-                        updateDate.setText(globalString.toString());
-                        String s_Date = globalString.toString();
+                        String s_Date = updateDate.getText().toString().length() == 0 ? globalString.toString() : updateDate.getText().toString();
 
-                        /*if (updateTopic.getText().toString().length() == 0 ||
+                        if (updateTopic.getText().toString().length() == 0 ||
                                 updateSummary.getText().toString().length() == 0 ||
                                 updateLocation.getText().toString().length() == 0 ||
-                                updateDate.getText().toString().length() == 0)
+                                s_Date.length() == 0)
                         {
                             Toast.makeText(AdminActivity.this, "Please Enter all fields", Toast.LENGTH_SHORT)
                                     .show();
                         }
                         else{
-                        */
+
                             ContentValues contentValues = new ContentValues();
                             contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_USER_ID, Settings.getUserID(AdminActivity.this));
                             contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_TOPIC, s_Topic);
@@ -265,7 +264,7 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
 
                             Toast.makeText(AdminActivity.this, updated + " Conference is Updated.", Toast.LENGTH_SHORT)
                                     .show();
-                        //}
+                        }
 
                     }
                 })
