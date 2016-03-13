@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,18 +30,23 @@ import com.crossoverproject.R;
 import com.crossoverproject.fragment.AdminActivityFragment;
 import com.crossoverproject.fragment.ViewConferences;
 import com.crossoverproject.provider.ConferenceContract;
+import com.crossoverproject.provider.ConferenceProvider;
 import com.crossoverproject.utils.Settings;
 
 import java.util.Calendar;
 
 public class AdminActivity extends AppCompatActivity implements AdminActivityFragment.Callback , ViewConferences.ConferenceCallback
 {
-    public static StringBuilder global_string = new StringBuilder();
+    public static StringBuilder globalString = new StringBuilder();
+
     EditText topic;
     EditText summary;
     EditText location;
     static TextView date;
     Button dateButton;
+
+    String conferenceID;
+    int updated;
 
     public static final String[] SUGGESTION_COLUMNS = {
             ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry._ID,
@@ -103,6 +110,26 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemSelected(Uri uri)
+    {
+        Toast.makeText(AdminActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConferenceSelected(Uri uri) {
+        editConference( uri );
+        Toast.makeText(AdminActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed () {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+    }
+
     private void addNewConference() {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         final View promptView = layoutInflater.inflate(R.layout.popup_conference, null);
@@ -127,8 +154,8 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
                         String sTopic = topic.getText().toString();
                         String sSummary = summary.getText().toString();
                         String sLocation = location.getText().toString();
-                        date.setText(global_string.toString());
-                        String sDate = global_string.toString();
+                        date.setText(globalString.toString());
+                        String sDate = globalString.toString();
 
                         if (!sTopic.equals("") && !sSummary.equals("") && !sLocation.equals("") && !sDate.equals("")) {
                             ContentValues contentValues = new ContentValues();
@@ -176,24 +203,76 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
                 .commit();
     }
 
-    @Override
-    public void onItemSelected(Uri uri)
-    {
-        Toast.makeText(AdminActivity.this, uri.toString() , Toast.LENGTH_SHORT).show();
-    }
+    private void editConference( Uri uri ) {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        final View promptView = layoutInflater.inflate(R.layout.popup_edit_conference, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptView);
 
-    @Override
-    public void onConferenceSelected(Uri uri) {
-        Toast.makeText(AdminActivity.this, uri.toString() , Toast.LENGTH_SHORT).show();
-    }
+        final EditText updateTopic = (EditText) promptView.findViewById(R.id.viewConferencePopupTopicEditText);
+        final EditText updateSummary = (EditText) promptView.findViewById(R.id.viewConferencePopupSummaryEditText);
+        final EditText updateLocation = (EditText) promptView.findViewById(R.id.viewConferencePopupLocationEditText);
+        final TextView updateDate = (TextView) promptView.findViewById(R.id.viewConferencePopupDateTextView);
+        final Button updateDateButton = (Button) promptView.findViewById(R.id.viewConferencePopupCalendarPickedDateButton);
 
-    @Override
-    public void onBackPressed ()
-    {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+        Cursor cursor = getContentResolver().query(uri, DoctorActivity.CONFERENCE_COLUMNS , null , null , null );
+
+        if (cursor != null)
         {
-            getSupportFragmentManager().popBackStackImmediate();
+            cursor.moveToFirst();
+            conferenceID = Long.toString(ConferenceContract.ConferenceEntry.getConferenceIDFromUri(uri));
+            Log.v("Conference ID" , conferenceID);
+            updateTopic.setText(cursor.getString(DoctorActivity.COLUMN_TOPIC));
+            updateSummary.setText(cursor.getString(DoctorActivity.COLUMN_SUMMARY));
+            updateLocation.setText(cursor.getString(DoctorActivity.COLUMN_LOCATION));
+            updateDate.setText(cursor.getString(DoctorActivity.COLUMN_DATE));
+            cursor.close();
         }
+
+        updateDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerFragment().show(getFragmentManager(), DatePickerFragment.class.getSimpleName());
+            }
+        });
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String s_Topic = updateTopic.getText().toString();
+                        String s_Summary = updateSummary.getText().toString();
+                        String s_Location = updateLocation.getText().toString();
+                        updateDate.setText(globalString.toString());
+                        String s_Date = globalString.toString();
+
+                        if (!s_Topic.equals("") && !s_Summary.equals("") && !s_Location.equals("") && !s_Date.equals("")) {
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_USER_ID, Settings.getUserID(AdminActivity.this));
+                            contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_TOPIC, s_Topic);
+                            contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_SUMMARY, s_Summary);
+                            contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_LOCATION, s_Location);
+                            contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_DATE, s_Date);
+
+                            updated = getContentResolver()
+                                    .update(ConferenceContract.ConferenceEntry.CONTENT_URI, contentValues,
+                                            ConferenceProvider.sConferenceIDSelection , new String [] {conferenceID} );
+
+                            Toast.makeText(AdminActivity.this, updated + " Conference is Updated.", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                        else
+                            Toast.makeText(AdminActivity.this, "Please Enter all fields", Toast.LENGTH_SHORT)
+                                    .show();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     public static class DatePickerFragment extends DialogFragment
@@ -211,15 +290,8 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
-        public void onDateSet(DatePicker view, int year, int month, int day)
-        {
-            global_string = new StringBuilder().append(month+1).append("-").append(day).append("-").append(year).append(" ");
-        }
-
-        @Override
-        public void onDestroyView() {
-            super.onDestroyView();
-            date.setText(global_string.toString());
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            globalString = new StringBuilder().append(month+1).append("-").append(day).append("-").append(year).append(" ");
         }
     }
 }
