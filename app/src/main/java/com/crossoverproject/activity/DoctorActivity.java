@@ -20,32 +20,33 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.crossoverproject.R;
 import com.crossoverproject.fragment.DoctorActivityFragment;
-import com.crossoverproject.fragment.SignInFragment;
-import com.crossoverproject.fragment.SignUpFragment;
-import com.crossoverproject.fragment.ViewConferences;
 import com.crossoverproject.fragment.ViewSuggestions;
 import com.crossoverproject.provider.ConferenceContract;
+import com.crossoverproject.provider.ConferenceProvider;
 import com.crossoverproject.utils.Settings;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-public class DoctorActivity extends AppCompatActivity implements DoctorActivityFragment.Callback {
-    public static StringBuilder global_string = new StringBuilder();
+public class DoctorActivity extends AppCompatActivity implements DoctorActivityFragment.Callback , ViewSuggestions.SuggestionsCallback
+{
+    public static StringBuilder globalString = new StringBuilder();
+
     EditText topic;
     EditText summary;
     EditText location;
+    Button datePicker;
     static TextView date;
+
+    String suggestionID;
+    int updated;
 
     public static final String[] CONFERENCE_COLUMNS = {
             ConferenceContract.ConferenceEntry.TABLE_NAME + "." + ConferenceContract.ConferenceEntry._ID,
@@ -108,54 +109,12 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
         return super.onOptionsItemSelected(item);
     }
 
-    private void addNewSuggestion() {
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        final View promptView = layoutInflater.inflate(R.layout.popup_suggestion, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setView(promptView);
-
-        topic = (EditText) promptView.findViewById(R.id.newSuggestionTopicEditText);
-        summary = (EditText) promptView.findViewById(R.id.newSuggestionSummaryEditText);
-        location = (EditText) promptView.findViewById(R.id.newSuggestionLocationEditText);
-        date = (TextView) promptView.findViewById(R.id.newSuggestionDateTextView);
-
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        String sTopic = topic.getText().toString();
-                        String sSummary = summary.getText().toString();
-                        String sLocation = location.getText().toString();
-                        date.setText(global_string.toString());
-                        String sDate = global_string.toString();
-
-                        if( !sTopic.equals("") && !sSummary.equals("") && !sLocation.equals("") && !sDate.equals("") )
-                        {
-                            ContentValues contentValues = new ContentValues();
-                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_USER_ID, Settings.getUserID(DoctorActivity.this));
-                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_TOPIC, sTopic);
-                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_SUMMARY, sSummary);
-                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_LOCATION_PREFERENCE, sLocation);
-                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_AVAILABILITY_DATE, sDate);
-
-                            DoctorActivity.this.getContentResolver()
-                                    .insert(ConferenceContract.SuggestionEntry.CONTENT_URI, contentValues);
-
-                            Toast.makeText(DoctorActivity.this, "Your Suggestion is logged. Thank you.", Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                        else
-                            Toast.makeText(DoctorActivity.this, "Please Enter all fields", Toast.LENGTH_SHORT)
-                                    .show();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
     }
 
     @Override
@@ -213,7 +172,14 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
 
             AlertDialog alert = alertDialogBuilder.create();
             alert.show();
+
+            cursor.close();
         }
+    }
+
+    @Override
+    public void onSuggestionsSelected(Uri uri) {
+        editSuggestion(uri);
     }
 
     private void signOut() {
@@ -225,10 +191,171 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
         this.finish();
     }
 
+    private void addNewSuggestion() {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        final View promptView = layoutInflater.inflate(R.layout.popup_suggestion, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptView);
+
+        topic = (EditText) promptView.findViewById(R.id.newSuggestionTopicEditText);
+        summary = (EditText) promptView.findViewById(R.id.newSuggestionSummaryEditText);
+        location = (EditText) promptView.findViewById(R.id.newSuggestionLocationEditText);
+        date = (TextView) promptView.findViewById(R.id.newSuggestionDateTextView);
+        datePicker = (Button)promptView.findViewById(R.id.newSuggestionsDatePickerButton);
+        datePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerFragment().show(getFragmentManager(), "datePicker");
+            }
+        });
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String sTopic = topic.getText().toString();
+                        String sSummary = summary.getText().toString();
+                        String sLocation = location.getText().toString();
+                        date.setText(globalString.toString());
+                        String sDate = globalString.toString();
+
+                        if( !sTopic.equals("") && !sSummary.equals("") && !sLocation.equals("") && !sDate.equals("") )
+                        {
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_USER_ID, Settings.getUserID(DoctorActivity.this));
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_TOPIC, sTopic);
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_SUMMARY, sSummary);
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_LOCATION_PREFERENCE, sLocation);
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_AVAILABILITY_DATE, sDate);
+
+                            DoctorActivity.this.getContentResolver()
+                                    .insert(ConferenceContract.SuggestionEntry.CONTENT_URI, contentValues);
+
+                            Toast.makeText(DoctorActivity.this, "Your Suggestion is logged. Thank you.", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                        else
+                            Toast.makeText(DoctorActivity.this, "Please Enter all fields", Toast.LENGTH_SHORT)
+                                    .show();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
     private void openSuggestions() {
         getSupportFragmentManager()
                 .beginTransaction().replace(R.id.doctorActivityFrameLayout, new ViewSuggestions() , ViewSuggestions.class.getSimpleName())
                 .addToBackStack(ViewSuggestions.class.getSimpleName()).commit();
+    }
+
+    private void editSuggestion(Uri uri){
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        final View promptView = layoutInflater.inflate(R.layout.popup_edit_suggestion, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText updateTopic = (EditText) promptView.findViewById(R.id.viewSuggestionPopupTopicEditText);
+        final EditText updateSummary = (EditText) promptView.findViewById(R.id.viewSuggestionPopupSummaryEditText);
+        final EditText updateLocation = (EditText) promptView.findViewById(R.id.viewSuggestionPopupLocationEditText);
+        final TextView updateDate = (TextView) promptView.findViewById(R.id.viewSuggestionPopupDateTextView);
+        final Button updateDateButton = (Button) promptView.findViewById(R.id.viewSuggestionPopupCalendarPickedDateButton);
+
+        Cursor cursor = getContentResolver().query(uri, AdminActivity.SUGGESTION_COLUMNS , null , null , null );
+
+        if (cursor != null)
+        {
+            cursor.moveToFirst();
+            suggestionID = Long.toString(ConferenceContract.SuggestionEntry.getSuggestionIDFromUri(uri));
+            updateTopic.setText(cursor.getString(AdminActivity.COLUMN_TOPIC));
+            updateSummary.setText(cursor.getString(AdminActivity.COLUMN_SUMMARY));
+            updateLocation.setText(cursor.getString(AdminActivity.COLUMN_LOCATION_PREFERENCE));
+            updateDate.setText(cursor.getString(AdminActivity.COLUMN_AVAILABILITY_DATE));
+            cursor.close();
+        }
+
+        updateDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerFragment().show(getFragmentManager(), DatePickerFragment.class.getSimpleName());
+            }
+        });
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String s_Topic = updateTopic.getText().toString();
+                        String s_Summary = updateSummary.getText().toString();
+                        String s_Location = updateLocation.getText().toString();
+                        String s_Date = updateDate.getText().toString().length() == 0 ? globalString.toString() : updateDate.getText().toString();
+
+                        if (updateTopic.getText().toString().length() == 0 ||
+                                updateSummary.getText().toString().length() == 0 ||
+                                updateLocation.getText().toString().length() == 0 ||
+                                s_Date.length() == 0)
+                        {
+                            Toast.makeText(DoctorActivity.this, "Please Enter all fields", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                        else{
+
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_USER_ID, Settings.getUserID(DoctorActivity.this));
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_TOPIC, s_Topic);
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_SUMMARY, s_Summary);
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_LOCATION_PREFERENCE, s_Location);
+                            contentValues.put(ConferenceContract.SuggestionEntry.COLUMN_AVAILABILITY_DATE, s_Date);
+
+                            updated = getContentResolver()
+                                    .update(ConferenceContract.SuggestionEntry.CONTENT_URI, contentValues,
+                                            ConferenceProvider.sSuggestionIDSelection , new String [] {suggestionID} );
+
+                            Toast.makeText(DoctorActivity.this, updated + " Suggestion is Updated.", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new AlertDialog.Builder(DoctorActivity.this)
+                                .setTitle("Delete entry")
+                                .setMessage("Are you sure you want to delete this entry?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        updated = getContentResolver()
+                                                .delete(ConferenceContract.SuggestionEntry.CONTENT_URI,
+                                                        ConferenceProvider.sSuggestionIDSelection,
+                                                        new String[]{suggestionID});
+
+                                        Toast.makeText(DoctorActivity.this, updated + " Suggestion has been Deleted.",
+                                                Toast.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     public static class DatePickerFragment extends DialogFragment
@@ -247,25 +374,7 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            global_string = new StringBuilder().append(month + 1).append("-").append(day).append("-").append(year).append(" ");
-        }
-
-        @Override
-        public void onDestroyView() {
-            super.onDestroyView();
-            date.setText(global_string.toString());
-        }
-    }
-
-    public void showDatePickerDialog(View v) {
-        new DatePickerFragment().show(getFragmentManager(), "datePicker");
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0)
-        {
-            getSupportFragmentManager().popBackStackImmediate();
+            globalString = new StringBuilder().append(month + 1).append("-").append(day).append("-").append(year).append(" ");
         }
     }
 }

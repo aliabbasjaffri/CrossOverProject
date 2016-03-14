@@ -69,10 +69,10 @@ public class ConferenceProvider extends ContentProvider
     public static final String sConferenceByUserIDSelection =
             ConferenceContract.ConferenceEntry.TABLE_NAME + "." + ConferenceContract.ConferenceEntry.COLUMN_USER_ID + " = ? ";
 
-    private static final String sSuggestionIDSelection =
+    public static final String sSuggestionIDSelection =
             ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry._ID + " = ? ";
 
-    private static final String sSuggestionByUserIDSelection =
+    public static final String sSuggestionByUserIDSelection =
             ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry.COLUMN_USER_ID + " = ? ";
 
     static UriMatcher buildUriMatcher()
@@ -389,7 +389,7 @@ public class ConferenceProvider extends ContentProvider
                 break;
             case SUGGESTION:
                 rowsDeleted = db.delete(
-                        ConferenceContract.ConferenceEntry.TABLE_NAME, selection, selectionArgs);
+                        ConferenceContract.SuggestionEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

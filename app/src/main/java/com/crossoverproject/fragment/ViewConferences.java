@@ -38,11 +38,6 @@ public class ViewConferences extends Fragment implements LoaderManager.LoaderCal
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_view_conferences, container, false);

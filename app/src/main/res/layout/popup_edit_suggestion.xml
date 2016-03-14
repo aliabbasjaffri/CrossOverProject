@@ -5,25 +5,26 @@
     android:padding="16dp">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Please fill in your Suggestions"
+        android:text="Please edit desired Suggestion Details"
         android:id="@+id/textView3"
         android:layout_gravity="center_horizontal"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:gravity="center" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/newSuggestionTopicEditText"
+        android:id="@+id/viewSuggestionPopupTopicEditText"
         android:layout_gravity="center_horizontal"
         android:hint="Topic" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/newSuggestionSummaryEditText"
+        android:id="@+id/viewSuggestionPopupSummaryEditText"
         android:layout_gravity="center_horizontal"
         android:lines="2"
         android:hint="Please provide brief Summary" />
@@ -31,23 +32,24 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/newSuggestionLocationEditText"
+        android:id="@+id/viewSuggestionPopupLocationEditText"
         android:layout_gravity="center_horizontal"
         android:hint="Location" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/newSuggestionDateTextView"
+        android:id="@+id/viewSuggestionPopupDateTextView"
         android:layout_gravity="center_horizontal"
-        android:text="@string/date"
+        android:text="Selected Date"
         android:minLines="3"
-        android:gravity="center" />
+        android:gravity="center_vertical|center_horizontal" />
 
     <Button
+        android:id="@+id/viewSuggestionPopupCalendarPickedDateButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/date"
-        android:id="@+id/newSuggestionsDatePickerButton" />
-
+        />
+    
 </LinearLayout>

@@ -34,16 +34,10 @@ import java.util.Calendar;
  */
 public class ViewConferenceAdapter extends CursorAdapter
 {
-    private Context context;
-    public static StringBuilder globalString = new StringBuilder();
     ViewConferenceViewHolder viewHolder;
-
-    String conferenceID;
-    int updated;
 
     public ViewConferenceAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-        this.context = context;
     }
 
     @Override
@@ -60,8 +54,6 @@ public class ViewConferenceAdapter extends CursorAdapter
     public void bindView(View view, Context context, final Cursor cursor)
     {
         viewHolder = (ViewConferenceViewHolder) view.getTag();
-
-        conferenceID = cursor.getString(DoctorActivity.COLUMN_CONFERENCE_ID);
 
         String sTopic = cursor.getString(DoctorActivity.COLUMN_TOPIC);
         viewHolder.topic.setText(sTopic);

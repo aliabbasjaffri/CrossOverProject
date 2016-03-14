@@ -48,6 +48,7 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     String conferenceID;
     int updated;
 
+    //TODO: remove Read Column
     public static final String[] SUGGESTION_COLUMNS = {
             ConferenceContract.SuggestionEntry.TABLE_NAME + "." + ConferenceContract.SuggestionEntry._ID,
             ConferenceContract.SuggestionEntry.COLUMN_USER_ID,
