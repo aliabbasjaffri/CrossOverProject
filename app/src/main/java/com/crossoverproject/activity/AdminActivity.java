@@ -46,6 +46,7 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     Button dateButton;
 
     String conferenceID;
+    String suggestionID;
     int updated;
 
     //TODO: remove Read Column
@@ -112,8 +113,69 @@ public class AdminActivity extends AppCompatActivity implements AdminActivityFra
     }
 
     @Override
-    public void onItemSelected(Uri uri) {
-        Toast.makeText(AdminActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
+    public void onItemSelected(final Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, SUGGESTION_COLUMNS, null, null, null);
+        if (cursor != null)
+        {
+            cursor.moveToFirst();
+
+            final String title = cursor.getString(AdminActivity.COLUMN_TOPIC);
+            final String description = cursor.getString(AdminActivity.COLUMN_SUMMARY);
+            final String location = cursor.getString(AdminActivity.COLUMN_LOCATION_PREFERENCE);
+            final String date = cursor.getString(AdminActivity.COLUMN_AVAILABILITY_DATE);
+            final String readTag = cursor.getString(AdminActivity.COLUMN_READ_TAG);
+
+            if( readTag.equals("1") )
+            {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle(R.string.convertToConference);
+
+                alertDialogBuilder.setCancelable(false)
+                        .setPositiveButton("Convert", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_USER_ID, Settings.getUserID(AdminActivity.this));
+                                contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_TOPIC, title);
+                                contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_SUMMARY, description);
+                                contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_LOCATION, location);
+                                contentValues.put(ConferenceContract.ConferenceEntry.COLUMN_DATE, date);
+
+                                AdminActivity.this.getContentResolver()
+                                        .insert(ConferenceContract.ConferenceEntry.CONTENT_URI, contentValues);
+
+                                Toast.makeText(AdminActivity.this, "Your Conference is posted. Thank you.", Toast.LENGTH_SHORT)
+                                        .show();
+
+                                ContentValues values = new ContentValues();
+                                values.put(ConferenceContract.SuggestionEntry.COLUMN_READ_TAG, "0");
+                                suggestionID = Long.toString(ConferenceContract.SuggestionEntry.getSuggestionIDFromUri(uri));
+                                updated = getContentResolver()
+                                        .update(ConferenceContract.SuggestionEntry.CONTENT_URI,
+                                                values,
+                                                ConferenceProvider.sSuggestionIDSelection,
+                                                new String[]{suggestionID});
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert = alertDialogBuilder.create();
+                alert.show();
+
+            }
+            else {
+                Toast.makeText(AdminActivity.this, "This Suggestion has already been converted to Conference.", Toast.LENGTH_SHORT)
+                        .show();
+            }
+            cursor.close();
+
+
+        }
     }
 
     @Override

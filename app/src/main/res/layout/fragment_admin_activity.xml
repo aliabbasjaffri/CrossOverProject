@@ -17,7 +17,8 @@
         android:text="Suggestions"
         android:id="@+id/textView4"
         android:layout_marginBottom="8dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold" />
 
     <ListView
         android:layout_width="match_parent"

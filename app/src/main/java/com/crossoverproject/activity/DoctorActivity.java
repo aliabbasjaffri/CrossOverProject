@@ -45,6 +45,7 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
     Button datePicker;
     static TextView date;
 
+    String conferenceID;
     String suggestionID;
     int updated;
 
@@ -118,7 +119,7 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
     }
 
     @Override
-    public void onItemSelected(Uri uri) {
+    public void onItemSelected(final Uri uri) {
 
         Cursor cursor = getContentResolver().query(uri, CONFERENCE_COLUMNS, null, null, null);
         if (cursor != null)
@@ -128,7 +129,8 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
             final String title = cursor.getString(DoctorActivity.COLUMN_TOPIC);
             final String description = cursor.getString(DoctorActivity.COLUMN_SUMMARY);
             final String location = cursor.getString(DoctorActivity.COLUMN_LOCATION);
-            String date = cursor.getString(DoctorActivity.COLUMN_DATE);
+            final String date = cursor.getString(DoctorActivity.COLUMN_DATE);
+            final String readTag = cursor.getString(DoctorActivity.COLUMN_READ_TAG);
 
             String[] dateInParts = date.split("-");
             final Calendar cal = new GregorianCalendar(Integer.parseInt(dateInParts[2].trim()) , Integer.parseInt(dateInParts[0].trim())
@@ -139,39 +141,55 @@ public class DoctorActivity extends AppCompatActivity implements DoctorActivityF
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
 
-            Toast.makeText(DoctorActivity.this, title + " " + description + " " + location + " " + date , Toast.LENGTH_SHORT).show();
-
             final long startDate = cal.getTimeInMillis();
 
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle(R.string.addToCalendar);
+            if( readTag.equals("1") )
+            {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle(R.string.addToCalendar);
 
-            alertDialogBuilder.setCancelable(false)
-                    .setPositiveButton("Enter", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int id)
+                alertDialogBuilder.setCancelable(false)
+                        .setPositiveButton("Enter", new DialogInterface.OnClickListener()
                         {
-                            Intent intent = new Intent(Intent.ACTION_EDIT);
-                            intent.setType("vnd.android.cursor.item/event");
-                            intent.putExtra("beginTime", startDate);
-                            intent.putExtra("allDay", true);
-                            intent.putExtra("rrule", "FREQ=YEARLY");
-                            intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
-                            intent.putExtra("title", title);
-                            intent.putExtra("description", description);
-                            intent.putExtra("eventLocation", location);
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                Intent intent = new Intent(Intent.ACTION_EDIT);
+                                intent.setType("vnd.android.cursor.item/event");
+                                intent.putExtra("beginTime", startDate);
+                                intent.putExtra("allDay", true);
+                                intent.putExtra("rrule", "FREQ=YEARLY");
+                                intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
+                                intent.putExtra("title", title);
+                                intent.putExtra("description", description);
+                                intent.putExtra("eventLocation", location);
 
-                            startActivity(intent);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
+                                startActivity(intent);
 
-            AlertDialog alert = alertDialogBuilder.create();
-            alert.show();
+                                ContentValues values = new ContentValues();
+                                values.put(ConferenceContract.ConferenceEntry.COLUMN_READ_TAG, "0");
+                                conferenceID = Long.toString(ConferenceContract.ConferenceEntry.getConferenceIDFromUri(uri));
+                                updated = getContentResolver()
+                                        .update(ConferenceContract.ConferenceEntry.CONTENT_URI,
+                                                values,
+                                                ConferenceProvider.sConferenceIDSelection,
+                                                new String[]{conferenceID});
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert = alertDialogBuilder.create();
+                alert.show();
+            }
+            else{
+                Toast.makeText(DoctorActivity.this, "This Conference has already been entered in Calendar.", Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+
 
             cursor.close();
         }

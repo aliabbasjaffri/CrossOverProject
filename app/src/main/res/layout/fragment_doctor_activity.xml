@@ -14,7 +14,8 @@
         android:text="Conferences"
         android:id="@+id/textView5"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/doctorActivityListView"

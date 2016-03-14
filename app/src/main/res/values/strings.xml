@@ -34,5 +34,6 @@
     <string name="date">Select Date</string>
 
     <string name="addToCalendar">Do you want to add this event to your Calendar?</string>
+    <string name="convertToConference">Do you want to convert this Suggestion to Conference?</string>
 
 </resources>
