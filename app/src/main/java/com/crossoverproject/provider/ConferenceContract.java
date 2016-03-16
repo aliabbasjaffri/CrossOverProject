@@ -20,9 +20,6 @@ public class ConferenceContract
     public static final String PATH_CONFERENCE = "conference";
     public static final String PATH_SUGGESTION = "suggestion";
 
-    private static final String sConferenceByUserIDSelection =
-            ConferenceContract.ConferenceEntry.TABLE_NAME + "." + ConferenceContract.ConferenceEntry.COLUMN_USER_ID + " = ? ";
-
     public static final class AdminEntry implements BaseColumns
     {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_ADMIN).build();
